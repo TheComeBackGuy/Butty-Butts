@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import './index.css'
 
-function App() {
+import styled from 'styled-components'
+
+export default function App() {
+
+  const Logo = styled.h1`
+  font-family: 'Oswald', sans-serif;
+    transform-origin: 50% 50%;
+  `
+  function LogoFlip(word) {
+    return <Logo>{word}</Logo>;
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    {LogoFlip('FLIP')}
       </header>
     </div>
   );
 }
-
-export default App;
