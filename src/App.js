@@ -180,13 +180,13 @@ export default function App() {
     <div className="App">
       <Logo>FLIP</Logo>
       <GameContainer id="gameContainer">{showBoard()}</GameContainer>
-      {/* <button
+      <button
         onClick={() => {
           generateAnswer();
         }}
       >
         Generate Answer
-      </button> */}
+      </button>
     </div>
   );
 }
