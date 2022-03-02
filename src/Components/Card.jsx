@@ -59,7 +59,7 @@ const CardBack = styled.div`
   backface-visibility: hidden;
 `;
 
-export default function Card({ key, card }) {
+export default function Card({ index, card }) {
   //   const [numberClicked, setNumberClicked] = useRecoilState(clickNumber);
   const [compareCards, setCompareCards] = useRecoilState(cardsToCompare);
   const matchedObjectsState = useRecoilValue(matchedObjects);
@@ -80,7 +80,7 @@ export default function Card({ key, card }) {
       onClick={(e) => {
         if (compareCards.length < 2 && !currentlyClicked && !alreadySolved) {
           //   setNumberClicked(numberClicked + 1);
-          console.log(key);
+          console.log(index);
           console.log(e);
           console.log('compareCards Array============');
           console.log(compareCards);

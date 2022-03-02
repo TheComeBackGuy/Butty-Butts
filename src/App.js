@@ -15,6 +15,7 @@ import { useState } from 'react';
 const Logo = styled.h1`
   font-family: Oswald, sans;
   font-weight: 200;
+  margin: 0 auto;
 `;
 const GameContainer = styled.section`
   display: flex;
@@ -27,8 +28,6 @@ const GameContainer = styled.section`
 `;
 
 export default function App() {
-  // const boardSize = 4;
-  // const [flippedCount, setFlippedCount] = useState(0);
   const [cardsToCompareState, setCardsToCompareState] =
     useRecoilState(cardsToCompare);
   const [currentBoard, setCurrentBoard] = useRecoilState(currentBoardState);
@@ -40,9 +39,6 @@ export default function App() {
     console.log(cardsToCompareState);
     //if you've flipped 2 cards
     if (cardsToCompareState.length === 2) {
-      // cardsToCompareState.forEach((card) => {
-      // console.log(document.querySelector(`#card${card[1]}`).firstChild);
-      // console.log(card);
       //if the colors don't match
       if (cardsToCompareState[0].color !== cardsToCompareState[1].color) {
         cardsToCompareState.forEach((card) => {
@@ -55,7 +51,7 @@ export default function App() {
         });
         console.log('NO MATCH');
       } else {
-        // if they match, disable the buttons
+        // if they match, throw the objects into an array of solved objects
         console.log('THEY MATCH');
         cardsToCompareState.forEach((card) => {
           setMatchedObjectsState((matchedObjectsState) => [
@@ -71,10 +67,6 @@ export default function App() {
     }
   }, [cardsToCompareState, setCardsToCompareState, setMatchedObjectsState]);
 
-  // useEffect(() => {
-  //   console.log(currentBoard);
-  // }, [currentBoard]);
-
   const cardColors = [
     'red',
     'orange',
@@ -85,41 +77,6 @@ export default function App() {
     'greenyellow',
     'darkred',
   ];
-
-  function generateAnswer() {
-    // create an answer array 16 entries long
-    // each color gets 2 spaces
-    if (!answerCreated) {
-      const answer = [];
-
-      //increase is there because the list of colors needs to be looped over twice so it has matches
-      let increase = 0;
-      for (let h = 0; h < 2; h++) {
-        for (let i = 0; i < cardColors.length; i++) {
-          // console.log(i);
-          //create and push an object for each color
-          answer.push({
-            color: cardColors[i],
-            id: i + increase,
-            clicked: false,
-            matched: false,
-          });
-        }
-        increase = 8;
-      }
-      //return array
-      console.log(answer);
-
-      // use the Fisher-yates shuffle to create a random answer
-      shuffle(answer);
-      setCurrentBoard(answer);
-
-      // set to true so answer won't run again and cause an infinite loop
-      setAnswerCreated(true);
-    }
-    // return;}
-  }
-  generateAnswer();
 
   // Fisher-Yates shuffle code found here:  https://bost.ocks.org/mike/shuffle/
   function shuffle(array) {
@@ -141,14 +98,47 @@ export default function App() {
     return array;
   }
 
+  function generateAnswer() {
+    // if we haven't already created an answer
+    if (!answerCreated) {
+      const answer = [];
+
+      //increase is there because the list of colors needs to be looped over twice so it has matches
+      let increase = 0;
+      for (let h = 0; h < 2; h++) {
+        for (let i = 0; i < cardColors.length; i++) {
+          // console.log(i);
+          //create and push an object for each color
+          answer.push({
+            color: cardColors[i],
+            // we're addingincrease to i so we have sequential id's to call later
+            id: i + increase,
+          });
+        }
+        increase = cardColors.length;
+      }
+      //return array
+      console.log(answer);
+
+      // use the Fisher-yates shuffle to create a random answer
+      shuffle(answer);
+      setCurrentBoard(answer);
+
+      // set to true so answer won't run again and cause an infinite loop
+      setAnswerCreated(true);
+    }
+    // return;}
+  }
+  generateAnswer();
+
   /** @showBoard takes the answer array and displays it by plugging the values into Card components
    */
   function showBoard() {
     let board = [];
     if (answerCreated) {
-      currentBoard.forEach((card, key) => {
+      currentBoard.forEach((card, index) => {
         // console.log(card.color);
-        board.push(<Card key={key} card={card} />);
+        board.push(<Card key={index} index={index} card={card} />);
       });
     }
 
@@ -158,39 +148,7 @@ export default function App() {
   return (
     <div className="App">
       <Logo>FLIP</Logo>
-      <GameContainer id="gameContainer">
-        {showBoard()}
-        {/* {cardColors.map((card, index) => (
-          <CardContainer
-            key={index}
-            id={`card${index}`}
-            onClick={(e) => {
-              if (flippedCards.length < 2) {
-                setFlippedCount(flippedCount + 1);
-                console.log(card);
-                setFlippedCards((flippedCards) => [
-                  ...flippedCards,
-                  [card, index],
-                ]);
-                e.currentTarget.firstChild.style.transform = 'rotateY(180deg)';
-              }
-              // console.log(e.currentTarget.firstChild.style.transform);
-            }}
-          >
-            <CardInner id="inner" innerRef={childRef}>
-              <CardFront
-                style={{
-                  color: card,
-                  // backgroundColor: card
-                }}
-              ></CardFront>
-              <CardBack style={{ backgroundColor: card }}>
-                {/* <h1> {card[0].toUpperCase()}</h1> */}
-        {/* </CardBack> */}
-        {/* </CardInner> */}
-        {/* // </CardContainer> */}
-        {/* ))} */}
-      </GameContainer>
+      <GameContainer id="gameContainer">{showBoard()}</GameContainer>
     </div>
   );
 }
