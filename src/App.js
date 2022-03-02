@@ -6,10 +6,10 @@ import {
   currentBoardState,
   matchedObjects,
 } from './data/atoms';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import Card from './Components/Card';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
 import { useState } from 'react';
 
 const Logo = styled.h1`
@@ -32,11 +32,12 @@ export default function App() {
     useRecoilState(cardsToCompare);
   const [currentBoard, setCurrentBoard] = useRecoilState(currentBoardState);
   const [answerCreated, setAnswerCreated] = useState(false);
-  const setMatchedObjectsState = useSetRecoilState(matchedObjects);
+  const [matchedObjectsState, setMatchedObjectsState] =
+    useRecoilState(matchedObjects);
 
   useEffect(() => {
     // console.log('Count: ' + flippedCount);
-    console.log(cardsToCompareState);
+    // console.log(cardsToCompareState);
     //if you've flipped 2 cards
     if (cardsToCompareState.length === 2) {
       //if the colors don't match
@@ -49,10 +50,10 @@ export default function App() {
               'rotateY(0deg)';
           }, 800);
         });
-        console.log('NO MATCH');
+        // console.log('NO MATCH');
       } else {
         // if they match, throw the objects into an array of solved objects
-        console.log('THEY MATCH');
+        // console.log('THEY MATCH');
         cardsToCompareState.forEach((card) => {
           setMatchedObjectsState((matchedObjectsState) => [
             ...matchedObjectsState,
@@ -65,7 +66,37 @@ export default function App() {
       setCardsToCompareState([]);
       // setFlippedCount(0);
     }
-  }, [cardsToCompareState, setCardsToCompareState, setMatchedObjectsState]);
+  }, [
+    cardsToCompareState,
+    setCardsToCompareState,
+    currentBoard,
+    matchedObjectsState,
+    setMatchedObjectsState,
+  ]);
+
+  useEffect(() => {
+    console.log(`MatchedObjects:  ${matchedObjectsState.length}`);
+    console.log(`CurrentBoard:  ${currentBoard.length}`);
+
+    // if the amount of answered boxes === the amount of boxes
+    if (matchedObjectsState.length === currentBoard.length) {
+      // end the game
+
+      console.log('game is over');
+
+      // causes delay in animation
+      let increaseTime = 0;
+      for (let i = 0; i < matchedObjectsState.length; i++) {
+        // console.log(matchedObjectsState.indexOf(matchedObjectsState[i]));
+        setTimeout(() => {
+          document.getElementById(
+            `${[currentBoard[i].id]}`
+          ).firstChild.style.transform = 'rotateY(0deg)';
+        }, 800 + increaseTime);
+        increaseTime += 25;
+      }
+    }
+  }, [matchedObjectsState, currentBoard]);
 
   const cardColors = [
     'red',
@@ -149,6 +180,13 @@ export default function App() {
     <div className="App">
       <Logo>FLIP</Logo>
       <GameContainer id="gameContainer">{showBoard()}</GameContainer>
+      {/* <button
+        onClick={() => {
+          generateAnswer();
+        }}
+      >
+        Generate Answer
+      </button> */}
     </div>
   );
 }
