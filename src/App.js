@@ -12,6 +12,24 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { useState } from 'react';
 
+const Button = styled.button`
+  display: flex;
+  margin: 30px auto;
+  padding: 10px;
+  border: 1px solid pink;
+  background-color: white;
+  color: pink;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 1s ease-in-out;
+  &:disabled {
+    transition: 0.5s ease-in-out;
+    display: none;
+    border: 1px solid lightgrey;
+    color: lightgrey;
+  }
+`;
+
 const Logo = styled.h1`
   font-family: Oswald, sans;
   font-weight: 200;
@@ -28,6 +46,7 @@ const GameContainer = styled.section`
 `;
 
 export default function App() {
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [cardsToCompareState, setCardsToCompareState] =
     useRecoilState(cardsToCompare);
   const [currentBoard, setCurrentBoard] = useRecoilState(currentBoardState);
@@ -35,9 +54,8 @@ export default function App() {
   const [matchedObjectsState, setMatchedObjectsState] =
     useRecoilState(matchedObjects);
 
+  //constant checking for matches
   useEffect(() => {
-    // console.log('Count: ' + flippedCount);
-    // console.log(cardsToCompareState);
     //if you've flipped 2 cards
     if (cardsToCompareState.length === 2) {
       //if the colors don't match
@@ -49,6 +67,11 @@ export default function App() {
             document.getElementById(`${card.id}`).firstChild.style.transform =
               'rotateY(0deg)';
           }, 800);
+          setTimeout(() => {
+            document.getElementById(
+              `${card.id}`
+            ).firstChild.lastChild.style.backgroundColor = 'transparent';
+          }, 1200);
         });
         // console.log('NO MATCH');
       } else {
@@ -74,6 +97,7 @@ export default function App() {
     setMatchedObjectsState,
   ]);
 
+  // checking for the end of the game
   useEffect(() => {
     console.log(`MatchedObjects:  ${matchedObjectsState.length}`);
     console.log(`CurrentBoard:  ${currentBoard.length}`);
@@ -95,8 +119,38 @@ export default function App() {
         }, 800 + increaseTime);
         increaseTime += 25;
       }
+      setTimeout(() => {
+        setShowSubmitButton(true);
+      }, 1300);
     }
-  }, [matchedObjectsState, currentBoard]);
+  }, [matchedObjectsState, currentBoard, showSubmitButton]);
+
+  function submitButton() {
+    if (showSubmitButton) {
+      return (
+        <Button
+          id="playAgain"
+          onClick={() => {
+            // generateAnswer();
+            setAnswerCreated(false);
+            setCurrentBoard([]);
+            setMatchedObjectsState([]);
+            generateAnswer();
+            showBoard();
+            setShowSubmitButton(false);
+          }}
+        >
+          Play Again?
+        </Button>
+      );
+    } else {
+      return (
+        <Button disabled id="playAgain" onClick={() => {}}>
+          Play Again?
+        </Button>
+      );
+    }
+  }
 
   const cardColors = [
     'red',
@@ -165,6 +219,8 @@ export default function App() {
   /** @showBoard takes the answer array and displays it by plugging the values into Card components
    */
   function showBoard() {
+    // document.getElementById('playAgain').style.display = 'flex';
+
     let board = [];
     if (answerCreated) {
       currentBoard.forEach((card, index) => {
@@ -172,7 +228,6 @@ export default function App() {
         board.push(<Card key={index} index={index} card={card} />);
       });
     }
-
     return board;
   }
 
@@ -180,13 +235,7 @@ export default function App() {
     <div className="App">
       <Logo>FLIP</Logo>
       <GameContainer id="gameContainer">{showBoard()}</GameContainer>
-      <button
-        onClick={() => {
-          generateAnswer();
-        }}
-      >
-        Generate Answer
-      </button>
+      {submitButton()}
     </div>
   );
 }

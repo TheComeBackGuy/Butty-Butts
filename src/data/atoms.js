@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export const clickNumber = atom({
   key: 'click-number',
@@ -18,4 +18,21 @@ export const currentBoardState = atom({
 export const matchedObjects = atom({
   key: 'matched-objects',
   default: [],
+});
+
+export const toggleButtonState = atom({
+  key: 'toggle-button-state',
+  default: false,
+});
+
+export const isButtonActiveSelector = selector({
+  key: 'is-button-active-selector',
+  get: ({ get }) => {
+    const toggle = get(toggleButtonState);
+    if (toggle) {
+      return get('flex');
+    } else {
+      return get('none');
+    }
+  },
 });

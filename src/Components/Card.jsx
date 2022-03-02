@@ -86,20 +86,22 @@ export default function Card({ index, card }) {
           // push the card into the set to compare
           setCompareCards((compareCards) => [...compareCards, card]);
           e.currentTarget.firstChild.style.transform = 'rotateY(180deg)';
+          e.currentTarget.firstChild.lastChild.style.backgroundColor =
+            card.color;
         }
         // console.log(e.currentTarget.firstChild.style.transform);
       }}
     >
       <CardInner id="inner" innerRef={childRef}>
         <CardFront
-          style={{
-            color: card.color,
-            // backgroundColor: card
-          }}
+          style={
+            {
+              // color: card.color,
+              // backgroundColor: card
+            }
+          }
         ></CardFront>
-        <CardBack style={{ backgroundColor: card.color }}>
-          {/* <h1> {card[0].toUpperCase()}</h1> */}
-        </CardBack>
+        <CardBack>{/* <h1> {card[0].toUpperCase()}</h1> */}</CardBack>
       </CardInner>
     </CardContainer>
   );
