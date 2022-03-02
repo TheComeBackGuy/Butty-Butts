@@ -66,10 +66,12 @@ export default function Card({ index, card }) {
 
   const childRef = React.useRef();
 
+  // looks to see if the you already clicked a square
   const currentlyClicked = compareCards.find(
     (element) => element.id === card.id
   );
 
+  // looks to see if you already solved the square
   const alreadySolved = matchedObjectsState.find(
     (element) => element.id === card.id
   );
@@ -78,12 +80,10 @@ export default function Card({ index, card }) {
     <CardContainer
       id={card.id}
       onClick={(e) => {
+        //   if you've clicked two cards
+        // and the one you clicked isn't already active or you haven't already solved it
         if (compareCards.length < 2 && !currentlyClicked && !alreadySolved) {
-          //   setNumberClicked(numberClicked + 1);
-          console.log(index);
-          console.log(e);
-          console.log('compareCards Array============');
-          console.log(compareCards);
+          // push the card into the set to compare
           setCompareCards((compareCards) => [...compareCards, card]);
           e.currentTarget.firstChild.style.transform = 'rotateY(180deg)';
         }
