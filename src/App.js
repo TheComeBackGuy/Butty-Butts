@@ -6,10 +6,10 @@ import {
   currentBoardState,
   matchedObjects,
 } from './data/atoms';
+import { useRecoilSetState, useRecoilState } from 'recoil';
 
 import Card from './Components/Card';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
 import { useState } from 'react';
 
 const Logo = styled.h1`
@@ -33,8 +33,7 @@ export default function App() {
     useRecoilState(cardsToCompare);
   const [currentBoard, setCurrentBoard] = useRecoilState(currentBoardState);
   const [answerCreated, setAnswerCreated] = useState(false);
-  const [matchedObjectsState, setMatchedObjectsState] =
-    useRecoilState(matchedObjects);
+  const setMatchedObjectsState = useRecoilSetState(matchedObjects);
 
   useEffect(() => {
     // console.log('Count: ' + flippedCount);
@@ -70,7 +69,7 @@ export default function App() {
       setCardsToCompareState([]);
       // setFlippedCount(0);
     }
-  }, [cardsToCompareState, setCardsToCompareState]);
+  }, [cardsToCompareState, setCardsToCompareState, setMatchedObjectsState]);
 
   // useEffect(() => {
   //   console.log(currentBoard);
