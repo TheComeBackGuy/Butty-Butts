@@ -1,4 +1,4 @@
-![image](./src/images/title.gif)
+![image  align="center"](./src/images/title.gif)
 
 ### Project Link
 
