@@ -26,18 +26,20 @@ const CardInner = styled.div`
 const CardContainer = styled.button`
   position: relative;
   background-color: transparent;
-  width: 100px;
-  height: 100px;
+  width: 20%;
+  min-width: 25px;
+  // height: 100px;
+  aspect-ratio: 1/1;
   border: 2px solid black;
   perspective: 1000px;
   transition: 0.8s;
   transform-style: preserve-3d;
   border: none;
   margin: 5px 5px;
+  /* border: 3px solid red; */
   &:hover ${CardInner} {
     cursor: pointer;
     /* transform: rotateY(180deg); */
-    /* border: 3px solid red; */
   }
 `;
 const CardFront = styled.div`

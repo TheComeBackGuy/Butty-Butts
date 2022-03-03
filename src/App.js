@@ -31,18 +31,25 @@ const Button = styled.button`
 `;
 
 const Logo = styled.h1`
+  text-align: center;
   font-family: Oswald, sans;
   font-weight: 200;
   margin: 0 auto;
+  border: 1px solid purple;
 `;
 const GameContainer = styled.section`
   display: flex;
-  width: 500px;
+  width: 100%;
+  min-width: 225px;
   // aspect-ratio: 1/1;
   flex-flow: row wrap;
   margin: 0 auto;
   align-items: flex-start;
   justify-content: center;
+  border: 1px solid red;
+  @media (max-width: 600px) {
+    width: inherit;
+  }
 `;
 
 export default function App() {
