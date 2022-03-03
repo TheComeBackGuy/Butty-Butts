@@ -32,10 +32,11 @@ const Button = styled.button`
 
 const Logo = styled.h1`
   text-align: center;
-  font-family: Oswald, sans;
+  font-family: 'Luckiest Guy', sans;
   font-weight: 200;
   margin: 0 auto;
-  border: 1px solid purple;
+  color: #2dc4f6;
+  // border: 1px solid purple;
 `;
 const GameContainer = styled.section`
   display: flex;
@@ -252,7 +253,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <Logo>FLIP</Logo>
+      <Logo>Butty butts</Logo>
       <GameContainer id="gameContainer">{showBoard()}</GameContainer>
       {submitButton()}
     </div>
