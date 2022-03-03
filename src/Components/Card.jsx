@@ -2,6 +2,14 @@ import { cardsToCompare, matchedObjects } from '../data/atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import React from 'react';
+import butt0 from '../images/butts/butt(0).jpg';
+import butt1 from '../images/butts/butt(1).jpg';
+import butt2 from '../images/butts/butt(2).jpg';
+import butt3 from '../images/butts/butt(3).jpg';
+import butt4 from '../images/butts/butt(4).jpg';
+import butt5 from '../images/butts/butt(5).jpg';
+import butt6 from '../images/butts/butt(6).jpg';
+import butt7 from '../images/butts/butt(7).jpg';
 import styled from 'styled-components';
 
 // import { useState } from 'react';
@@ -63,6 +71,9 @@ export default function Card({ index, card }) {
   //   const [numberClicked, setNumberClicked] = useRecoilState(clickNumber);
   const [compareCards, setCompareCards] = useRecoilState(cardsToCompare);
   const matchedObjectsState = useRecoilValue(matchedObjects);
+  // const [bgImage, setBgImage] = useState('');
+
+  // let bgImage = { backgroundImage: `url(${this.state})` };
 
   const childRef = React.useRef();
 
@@ -76,6 +87,17 @@ export default function Card({ index, card }) {
     (element) => element.id === card.id
   );
 
+  const backgroundButts = [
+    butt0,
+    butt1,
+    butt2,
+    butt3,
+    butt4,
+    butt5,
+    butt6,
+    butt7,
+  ];
+
   return (
     <CardContainer
       id={card.id}
@@ -86,8 +108,13 @@ export default function Card({ index, card }) {
           // push the card into the set to compare
           setCompareCards((compareCards) => [...compareCards, card]);
           e.currentTarget.firstChild.style.transform = 'rotateY(180deg)';
+          e.currentTarget.firstChild.lastChild.style.backgroundImage = `url('${
+            backgroundButts[card.image]
+          }')`;
+          e.currentTarget.firstChild.lastChild.style.backgroundSize = '100%';
           e.currentTarget.firstChild.lastChild.style.backgroundColor =
             card.color;
+          console.log(e.currentTarget.firstChild.lastChild.style);
         }
         // console.log(e.currentTarget.firstChild.style.transform);
       }}

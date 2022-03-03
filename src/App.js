@@ -23,10 +23,10 @@ const Button = styled.button`
   cursor: pointer;
   transition: 1s ease-in-out;
   &:disabled {
-    transition: 0.5s ease-in-out;
+    transition: 1s ease-in-out;
     display: none;
-    border: 1px solid lightgrey;
-    color: lightgrey;
+    // border: 1px solid lightgrey;
+    // color: lightgrey;
   }
 `;
 
@@ -163,6 +163,17 @@ export default function App() {
     'darkred',
   ];
 
+  // const butts = [
+  //   'butt(1)',
+  //   'butt(2)',
+  //   'butt(3)',
+  //   'butt(4)',
+  //   'butt(5)',
+  //   'butt(6)',
+  //   'butt(7)',
+  //   'butt(8)',
+  // ];
+
   // Fisher-Yates shuffle code found here:  https://bost.ocks.org/mike/shuffle/
   function shuffle(array) {
     var m = array.length,
@@ -196,6 +207,7 @@ export default function App() {
           //create and push an object for each color
           answer.push({
             color: cardColors[i],
+            image: i,
             // we're addingincrease to i so we have sequential id's to call later
             id: i + increase,
           });
