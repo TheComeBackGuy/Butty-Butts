@@ -47,7 +47,7 @@ const GameContainer = styled.section`
   margin: 0 auto;
   align-items: flex-start;
   justify-content: center;
-  border: 1px solid red;
+  // border: 1px solid red;
   @media (max-width: 600px) {
     width: inherit;
   }

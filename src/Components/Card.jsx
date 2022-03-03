@@ -30,7 +30,7 @@ const CardContainer = styled.button`
   min-width: 25px;
   // height: 100px;
   aspect-ratio: 1/1;
-  border: 2px solid black;
+  // border: 2px solid black;
   perspective: 1000px;
   transition: 0.8s;
   transform-style: preserve-3d;
