@@ -34,7 +34,7 @@ const Logo = styled.h1`
   text-align: center;
   font-family: 'Luckiest Guy', sans;
   font-weight: 200;
-  margin: 0 auto;
+  margin: 20px auto 0 auto;
   color: #2dc4f6;
   // border: 1px solid purple;
 `;
