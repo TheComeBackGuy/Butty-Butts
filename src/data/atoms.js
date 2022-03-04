@@ -36,3 +36,12 @@ export const isButtonActiveSelector = selector({
     }
   },
 });
+
+export const levelNumberState = atom({
+  key: 'round-number-state',
+  default: 1,
+});
+export const totalNumberOfLevelsState = atom({
+  key: 'total-number-of-levels-state',
+  default: 2,
+});

@@ -4,12 +4,15 @@ import React, { useEffect } from 'react';
 import {
   cardsToCompare,
   currentBoardState,
+  levelNumberState,
   matchedObjects,
+  totalNumberOfLevelsState,
 } from './data/atoms';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
 import Card from './Components/Card';
+import LogoImg from './images/logo.jpg';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
 import { useState } from 'react';
 
 const Button = styled.button`
@@ -30,14 +33,24 @@ const Button = styled.button`
   }
 `;
 
-const Logo = styled.h1`
-  text-align: center;
-  font-family: 'Luckiest Guy', sans;
-  font-weight: 200;
+const Logo = styled.img`
+  // text-align: center;
+  // font-family: 'Luckiest Guy', sans;
+  // font-weight: 200;
   margin: 20px auto 0 auto;
-  color: #2dc4f6;
+  // color: #2dc4f6;
   // border: 1px solid purple;
 `;
+
+const Subtitle = styled.h2`
+  text-align: center;
+  font-family: Oswald, sans;
+  font-size: 20px;
+  font-weight: 100;
+  margin: -10px auto 10px auto;
+  color: #2dc4f6;
+`;
+
 const GameContainer = styled.section`
   display: flex;
   width: 100%;
@@ -61,6 +74,9 @@ export default function App() {
   const [answerCreated, setAnswerCreated] = useState(false);
   const [matchedObjectsState, setMatchedObjectsState] =
     useRecoilState(matchedObjects);
+  const [levelNumber, setLevelNumber] = useRecoilState(levelNumberState);
+  const resetLevels = useResetRecoilState(levelNumberState);
+  const totalNumberOfLevels = useRecoilValue(totalNumberOfLevelsState);
 
   //constant checking for matches
   useEffect(() => {
@@ -129,9 +145,19 @@ export default function App() {
       }
       setTimeout(() => {
         setShowSubmitButton(true);
-      }, 1300);
+      }, 2500);
     }
   }, [matchedObjectsState, currentBoard, showSubmitButton]);
+
+  useEffect(() => []);
+
+  function handleLevelNumber() {
+    if (levelNumber < totalNumberOfLevels) {
+      setLevelNumber(levelNumber + 1);
+    } else if (levelNumber === totalNumberOfLevels) {
+      resetLevels();
+    }
+  }
 
   function submitButton() {
     if (showSubmitButton) {
@@ -143,6 +169,7 @@ export default function App() {
             setAnswerCreated(false);
             setCurrentBoard([]);
             setMatchedObjectsState([]);
+            handleLevelNumber();
             generateAnswer();
             showBoard();
             setShowSubmitButton(false);
@@ -253,7 +280,9 @@ export default function App() {
 
   return (
     <div className="App">
-      <Logo>Butty butts</Logo>
+      <Logo src={LogoImg} alt="Btty Butts" />
+      <Subtitle>Picture Pack: {levelNumber}</Subtitle>
+
       <GameContainer id="gameContainer">{showBoard()}</GameContainer>
       {submitButton()}
     </div>
