@@ -47,7 +47,7 @@ const CardFront = styled.div`
   height: 100%;
   background-color: white;
   -webkit-backface-visibility: hidden; /* Safari */
-  border: 1px solid lightblue;
+  border: 2px solid lightblue;
   border-radius: 15px;
   backface-visibility: hidden;
 `;

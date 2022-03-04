@@ -45,7 +45,7 @@ const Logo = styled.img`
 const Subtitle = styled.h2`
   text-align: center;
   font-family: Oswald, sans;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 100;
   margin: -10px auto 10px auto;
   color: #2dc4f6;
@@ -67,7 +67,7 @@ const GameContainer = styled.section`
 `;
 
 export default function App() {
-  const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const [showSubmitButton, setShowSubmitButton] = useState('none');
   const [cardsToCompareState, setCardsToCompareState] =
     useRecoilState(cardsToCompare);
   const [currentBoard, setCurrentBoard] = useRecoilState(currentBoardState);
@@ -123,16 +123,14 @@ export default function App() {
 
   // checking for the end of the game
   useEffect(() => {
-    console.log(`MatchedObjects:  ${matchedObjectsState.length}`);
-    console.log(`CurrentBoard:  ${currentBoard.length}`);
-
+    console.log('useEffect fired again');
     // if the amount of answered boxes === the amount of boxes
-    if (matchedObjectsState.length === currentBoard.length) {
+    if (matchedObjectsState.length === 16) {
       // end the game
-
       console.log('game is over');
 
-      // causes delay in animation
+      setAnswerCreated(false);
+      // causes delay in animation of tiles
       let increaseTime = 0;
       for (let i = 0; i < matchedObjectsState.length; i++) {
         // console.log(matchedObjectsState.indexOf(matchedObjectsState[i]));
@@ -144,10 +142,19 @@ export default function App() {
         increaseTime += 25;
       }
       setTimeout(() => {
-        setShowSubmitButton(true);
-      }, 2500);
+        setShowSubmitButton('flex');
+        console.log('this is the timed button turning on. ');
+      }, 1500);
+      setCurrentBoard([]);
+      setMatchedObjectsState([]);
     }
-  }, [matchedObjectsState, currentBoard, showSubmitButton]);
+  }, [
+    matchedObjectsState,
+    currentBoard,
+    showSubmitButton,
+    setCurrentBoard,
+    setMatchedObjectsState,
+  ]);
 
   useEffect(() => []);
 
@@ -159,33 +166,21 @@ export default function App() {
     }
   }
 
-  function submitButton() {
-    if (showSubmitButton) {
-      return (
-        <Button
-          id="playAgain"
-          onClick={() => {
-            // generateAnswer();
-            setAnswerCreated(false);
-            setCurrentBoard([]);
-            setMatchedObjectsState([]);
-            handleLevelNumber();
-            generateAnswer();
-            showBoard();
-            setShowSubmitButton(false);
-          }}
-        >
-          Play Again?
-        </Button>
-      );
-    } else {
-      return (
-        <Button disabled id="playAgain" onClick={() => {}}>
-          Play Again?
-        </Button>
-      );
-    }
-  }
+  // function submitButton() {
+  //   if (showSubmitButton) {
+  //     return (
+  //       <Button
+  //         id="playAgain"
+  //         onClick={() => {
+  //           // generateAnswer();
+
+  //         }}
+  //       >
+  //         Play Again?
+  //       </Button>
+  //     );
+  //   }
+  // }
 
   const cardColors = [
     'red',
@@ -275,6 +270,7 @@ export default function App() {
         board.push(<Card key={index} index={index} card={card} />);
       });
     }
+    console.log('showBoard fired');
     return board;
   }
 
@@ -284,7 +280,19 @@ export default function App() {
       <Subtitle>Picture Pack: {levelNumber}</Subtitle>
 
       <GameContainer id="gameContainer">{showBoard()}</GameContainer>
-      {submitButton()}
+      {/* {submitButton()} */}
+      <Button
+        onClick={() => {
+          setShowSubmitButton('none');
+          handleLevelNumber();
+          generateAnswer();
+          showBoard();
+          console.log('just shut button off');
+        }}
+        style={{ display: showSubmitButton }}
+      >
+        Keep Playing?
+      </Button>
     </div>
   );
 }
