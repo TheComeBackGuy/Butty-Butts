@@ -100,7 +100,7 @@ export default function Card({ index, card }) {
           e.currentTarget.firstChild.lastChild.style.backgroundSize = '100%';
           e.currentTarget.firstChild.lastChild.style.backgroundColor =
             card.color;
-          console.log(e.currentTarget.firstChild.lastChild.style);
+          // console.log(e.currentTarget.firstChild.lastChild.style);
         }
         // console.log(e.currentTarget.firstChild.style.transform);
       }}

@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import {
   cardsToCompare,
   currentBoardState,
+  gameIsActiveState,
   levelNumberState,
   matchedObjects,
   totalNumberOfLevelsState,
@@ -77,41 +78,46 @@ export default function App() {
   const [levelNumber, setLevelNumber] = useRecoilState(levelNumberState);
   const resetLevels = useResetRecoilState(levelNumberState);
   const totalNumberOfLevels = useRecoilValue(totalNumberOfLevelsState);
+  const [gameIsActive, setGameIsActive] = useRecoilState(gameIsActiveState);
 
   //constant checking for matches
+  //pushes to a matchedObjects array if they match
   useEffect(() => {
     //if you've flipped 2 cards
-    if (cardsToCompareState.length === 2) {
-      //if the colors don't match
-      if (cardsToCompareState[0].color !== cardsToCompareState[1].color) {
-        cardsToCompareState.forEach((card) => {
-          //wait a secondbefore flipping them back
-          console.log(document.getElementById(`${card.id}`));
-          setTimeout(() => {
-            document.getElementById(`${card.id}`).firstChild.style.transform =
-              'rotateY(0deg)';
-          }, 800);
-          setTimeout(() => {
-            document.getElementById(
-              `${card.id}`
-            ).firstChild.lastChild.style.backgroundColor = 'transparent';
-          }, 1200);
-        });
-        // console.log('NO MATCH');
-      } else {
-        // if they match, throw the objects into an array of solved objects
-        // console.log('THEY MATCH');
-        cardsToCompareState.forEach((card) => {
-          setMatchedObjectsState((matchedObjectsState) => [
-            ...matchedObjectsState,
-            card,
-          ]);
-        });
-      }
-      // });
+    if (gameIsActive) {
+      if (cardsToCompareState.length === 2) {
+        console.log('useEffect fired to compare cards');
+        //if the colors don't match
+        if (cardsToCompareState[0].color !== cardsToCompareState[1].color) {
+          cardsToCompareState.forEach((card) => {
+            //wait a secondbefore flipping them back
+            // console.log(document.getElementById(`${card.id}`));
+            setTimeout(() => {
+              document.getElementById(`${card.id}`).firstChild.style.transform =
+                'rotateY(0deg)';
+            }, 800);
+            setTimeout(() => {
+              document.getElementById(
+                `${card.id}`
+              ).firstChild.lastChild.style.backgroundColor = 'transparent';
+            }, 1200);
+          });
+          console.log('NO MATCH');
+        } else {
+          // if they match, throw the objects into an array of solved objects
+          console.log('THEY MATCH');
+          cardsToCompareState.forEach((card) => {
+            setMatchedObjectsState((matchedObjectsState) => [
+              ...matchedObjectsState,
+              card,
+            ]);
+          });
+        }
+        // });
 
-      setCardsToCompareState([]);
-      // setFlippedCount(0);
+        setCardsToCompareState([]);
+        // setFlippedCount(0);
+      }
     }
   }, [
     cardsToCompareState,
@@ -119,34 +125,38 @@ export default function App() {
     currentBoard,
     matchedObjectsState,
     setMatchedObjectsState,
+    gameIsActive,
   ]);
 
   // checking for the end of the game
   useEffect(() => {
-    console.log('useEffect fired again');
-    // if the amount of answered boxes === the amount of boxes
-    if (matchedObjectsState.length === 16) {
-      // end the game
-      console.log('game is over');
+    if (gameIsActive) {
+      console.log('useEffect fired compare');
+      // if the amount of answered boxes === the amount of boxes
+      if (matchedObjectsState.length === 16) {
+        // end the game
+        console.log('game is over');
 
-      setAnswerCreated(false);
-      // causes delay in animation of tiles
-      let increaseTime = 0;
-      for (let i = 0; i < matchedObjectsState.length; i++) {
-        // console.log(matchedObjectsState.indexOf(matchedObjectsState[i]));
+        // causes delay in animation of tiles
+        let increaseTime = 0;
+        for (let i = 0; i < currentBoard.length; i++) {
+          // console.log(matchedObjectsState.indexOf(matchedObjectsState[i]));
+          console.log(currentBoard[i].id);
+          setTimeout(() => {
+            // currentBoard[i].firstChild.style.transform = 'rotateY(0deg)';
+            document.getElementById(
+              `${[currentBoard[i].id]}`
+            ).firstChild.style.transform = 'rotateY(0deg)';
+          }, 800 + increaseTime);
+          increaseTime += 20;
+        }
         setTimeout(() => {
-          document.getElementById(
-            `${[currentBoard[i].id]}`
-          ).firstChild.style.transform = 'rotateY(0deg)';
-        }, 800 + increaseTime);
-        increaseTime += 25;
+          setShowSubmitButton('flex');
+          console.log('this is the timed button turning on. ');
+        }, 1500);
+
+        setMatchedObjectsState([]);
       }
-      setTimeout(() => {
-        setShowSubmitButton('flex');
-        console.log('this is the timed button turning on. ');
-      }, 1500);
-      setCurrentBoard([]);
-      setMatchedObjectsState([]);
     }
   }, [
     matchedObjectsState,
@@ -154,6 +164,8 @@ export default function App() {
     showSubmitButton,
     setCurrentBoard,
     setMatchedObjectsState,
+    setGameIsActive,
+    gameIsActive,
   ]);
 
   useEffect(() => []);
@@ -193,17 +205,6 @@ export default function App() {
     'darkred',
   ];
 
-  // const butts = [
-  //   'butt(1)',
-  //   'butt(2)',
-  //   'butt(3)',
-  //   'butt(4)',
-  //   'butt(5)',
-  //   'butt(6)',
-  //   'butt(7)',
-  //   'butt(8)',
-  // ];
-
   // Fisher-Yates shuffle code found here:  https://bost.ocks.org/mike/shuffle/
   function shuffle(array) {
     var m = array.length,
@@ -226,7 +227,8 @@ export default function App() {
 
   function generateAnswer() {
     // if we haven't already created an answer
-    if (!answerCreated) {
+    if (!answerCreated && gameIsActive) {
+      console.log('generateAnswer fired');
       const answer = [];
 
       //increase is there because the list of colors needs to be looped over twice so it has matches
@@ -245,7 +247,7 @@ export default function App() {
         increase = cardColors.length;
       }
       //return array
-      console.log(answer);
+      // console.log(answer);
 
       // use the Fisher-yates shuffle to create a random answer
       shuffle(answer);
@@ -256,6 +258,7 @@ export default function App() {
     }
     // return;}
   }
+
   generateAnswer();
 
   /** @showBoard takes the answer array and displays it by plugging the values into Card components
@@ -264,7 +267,7 @@ export default function App() {
     // document.getElementById('playAgain').style.display = 'flex';
 
     let board = [];
-    if (answerCreated) {
+    if (answerCreated && gameIsActive) {
       currentBoard.forEach((card, index) => {
         // console.log(card.color);
         board.push(<Card key={index} index={index} card={card} />);
@@ -283,6 +286,9 @@ export default function App() {
       {/* {submitButton()} */}
       <Button
         onClick={() => {
+          setCurrentBoard([]);
+          setAnswerCreated(false);
+          setGameIsActive(true);
           setShowSubmitButton('none');
           handleLevelNumber();
           generateAnswer();

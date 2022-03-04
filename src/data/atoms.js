@@ -1,5 +1,10 @@
 import { atom } from 'recoil';
 
+export const gameIsActiveState = atom({
+  key: 'game-is-active-state',
+  default: true,
+});
+
 export const clickNumber = atom({
   key: 'click-number',
   default: 0,
