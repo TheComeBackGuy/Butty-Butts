@@ -16,7 +16,6 @@ import Card from './Components/Card';
 import LogoImg from './images/logo.jpg';
 import VolumeButton from './Components/VolumeButton';
 import flip2 from './sounds/flip2.mp3';
-import { keyframes } from 'styled-components';
 import match from './sounds/matchBell.mp3';
 import spin from './sounds/spin.mp3';
 import styled from 'styled-components';
@@ -91,11 +90,6 @@ export default function App() {
   const resetLevels = useResetRecoilState(levelNumberState);
   const totalNumberOfLevels = useRecoilValue(totalNumberOfLevelsState);
   const [gameIsActive, setGameIsActive] = useRecoilState(gameIsActiveState);
-  const [winningPair, setWinningPair] = useState(false);
-
-  function startGame() {
-    ///events
-  }
 
   //constant checking for matches
   //pushes to a matchedObjects array if they match
@@ -157,6 +151,10 @@ export default function App() {
     matchedObjectsState,
     setMatchedObjectsState,
     gameIsActive,
+    playFlip,
+    playMatch,
+    playSpin,
+    volumeUp,
   ]);
 
   // checking for the end of the game
