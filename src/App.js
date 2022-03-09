@@ -93,6 +93,10 @@ export default function App() {
   const [gameIsActive, setGameIsActive] = useRecoilState(gameIsActiveState);
   const [winningPair, setWinningPair] = useState(false);
 
+  function startGame() {
+    ///events
+  }
+
   //constant checking for matches
   //pushes to a matchedObjects array if they match
   useEffect(() => {
@@ -163,7 +167,7 @@ export default function App() {
       // end the game
       console.log('game is over');
 
-      setGameIsActive(false);
+      // setGameIsActive(false);
       // causes delay in animation of tiles
       let increaseTime = 0;
       for (let i = 0; i < currentBoard.length; i++) {
@@ -193,17 +197,6 @@ export default function App() {
     setGameIsActive,
     gameIsActive,
   ]);
-
-  function handleShake() {
-    // Button begins to shake
-    const affectedItem = document.getElementById('testBox');
-
-    setWinningPair(true);
-
-    // affectedItem.innerText = 'Hit it';
-    console.log('item is: ');
-    console.log(affectedItem);
-  }
 
   function handleLevelNumber() {
     if (levelNumber < totalNumberOfLevels) {
