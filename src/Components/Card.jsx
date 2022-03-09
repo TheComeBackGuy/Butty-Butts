@@ -3,6 +3,7 @@ import {
   gameIsActiveState,
   levelNumberState,
   matchedObjects,
+  timerState,
   volumeState,
 } from '../data/atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -77,6 +78,7 @@ export default function Card({ index, card }) {
   const [compareCards, setCompareCards] = useRecoilState(cardsToCompare);
   const matchedObjectsState = useRecoilValue(matchedObjects);
   const roundNumber = useRecoilValue(levelNumberState);
+  const [timerIsOn, setTimerIsOn] = useRecoilState(timerState);
   // const [bgImage, setBgImage] = useState('');
 
   // let bgImage = { backgroundImage: `url(${this.state})` };
@@ -97,6 +99,11 @@ export default function Card({ index, card }) {
     <CardContainer
       id={card.id}
       onClick={(e) => {
+        // start timer on first click
+        if (!timerIsOn) {
+          setTimerIsOn(true);
+        }
+
         //   if you've clicked two cards
         // and the one you clicked isn't already active or you haven't already solved it
         if (

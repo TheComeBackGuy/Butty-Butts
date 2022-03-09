@@ -11,10 +11,14 @@ import {
   totalNumberOfLevelsState,
   volumeState,
 } from './data/atoms';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 
 import Board from './Components/Board';
-import Card from './Components/Card';
 import LogoImg from './images/logo.jpg';
 import Timer from './Components/Timer';
 import VolumeButton from './Components/VolumeButton';
@@ -82,7 +86,7 @@ export default function App() {
   const [playSpin] = useSound(spin);
   const [playMatch] = useSound(match);
   const volumeUp = useRecoilValue(volumeState);
-  const [timerIsOn, setTimerIsOn] = useRecoilState(timerState);
+  const setTimerIsOn = useSetRecoilState(timerState);
   const [showSubmitButton, setShowSubmitButton] = useState('none');
   const [cardsToCompareState, setCardsToCompareState] =
     useRecoilState(cardsToCompare);
@@ -190,7 +194,8 @@ export default function App() {
       }, 1500);
 
       setMatchedObjectsState([]);
-      endGame();
+      setTimerIsOn(false);
+      setGameIsActive(false);
     }
   }, [
     matchedObjectsState,
@@ -200,7 +205,7 @@ export default function App() {
     setMatchedObjectsState,
     setGameIsActive,
     gameIsActive,
-    endGame,
+    setTimerIsOn,
   ]);
 
   function handleLevelNumber() {
@@ -297,7 +302,7 @@ export default function App() {
   // function runs to initiate game start
   function startGame() {
     setGameIsActive(true);
-    setTimerIsOn(true);
+    // setTimerIsOn(true);
     setCurrentBoard([]);
     setAnswerCreated(false);
     setShowSubmitButton('none');
@@ -308,13 +313,6 @@ export default function App() {
     //generateAnswer()
     // showBoard()
   }
-
-  function endGame() {
-    setTimerIsOn(false);
-    setGameIsActive(false);
-  }
-
-  // function LevelTimer() {}
 
   return (
     <div className="App">
