@@ -7,13 +7,16 @@ import {
   gameIsActiveState,
   levelNumberState,
   matchedObjects,
+  timerState,
   totalNumberOfLevelsState,
   volumeState,
 } from './data/atoms';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
+import Board from './Components/Board';
 import Card from './Components/Card';
 import LogoImg from './images/logo.jpg';
+import Timer from './Components/Timer';
 import VolumeButton from './Components/VolumeButton';
 import flip2 from './sounds/flip2.mp3';
 import match from './sounds/matchBell.mp3';
@@ -79,6 +82,7 @@ export default function App() {
   const [playSpin] = useSound(spin);
   const [playMatch] = useSound(match);
   const volumeUp = useRecoilValue(volumeState);
+  const [timerIsOn, setTimerIsOn] = useRecoilState(timerState);
   const [showSubmitButton, setShowSubmitButton] = useState('none');
   const [cardsToCompareState, setCardsToCompareState] =
     useRecoilState(cardsToCompare);
@@ -91,11 +95,15 @@ export default function App() {
   const totalNumberOfLevels = useRecoilValue(totalNumberOfLevelsState);
   const [gameIsActive, setGameIsActive] = useRecoilState(gameIsActiveState);
 
+  useEffect(() => {
+    setGameIsActive(true);
+  }, [setGameIsActive]);
+
   //constant checking for matches
   //pushes to a matchedObjects array if they match
   useEffect(() => {
-    //if you've flipped 2 cards
     if (gameIsActive) {
+      //if you've flipped 2 cards
       if (cardsToCompareState.length === 2) {
         console.log('useEffect fired to compare cards');
         //if the colors don't match
@@ -134,9 +142,7 @@ export default function App() {
               card,
             ]);
           });
-          for (let i = 0; i < 1; i++) {
-            console.log(matchedObjectsState);
-          }
+          console.log(matchedObjectsState);
         }
         // });
 
@@ -159,13 +165,12 @@ export default function App() {
 
   // checking for the end of the game
   useEffect(() => {
-    console.log('useEffect fired compare');
+    console.log('useEffect fired to check end of game');
     // if the amount of answered boxes === the amount of boxes
     if (matchedObjectsState.length === 16) {
       // end the game
       console.log('game is over');
-
-      // setGameIsActive(false);
+      // endGame();
       // causes delay in animation of tiles
       let increaseTime = 0;
       for (let i = 0; i < currentBoard.length; i++) {
@@ -185,6 +190,7 @@ export default function App() {
       }, 1500);
 
       setMatchedObjectsState([]);
+      endGame();
     }
   }, [
     matchedObjectsState,
@@ -194,6 +200,7 @@ export default function App() {
     setMatchedObjectsState,
     setGameIsActive,
     gameIsActive,
+    endGame,
   ]);
 
   function handleLevelNumber() {
@@ -271,44 +278,70 @@ export default function App() {
 
   generateAnswer();
 
-  /** @showBoard takes the answer array and displays it by plugging the values into Card components
-   */
-  function showBoard() {
-    // document.getElementById('playAgain').style.display = 'flex';
+  // /** @showBoard takes the answer array and displays it by plugging the values into Card components
+  //  */
+  // function showBoard() {
+  //   // document.getElementById('playAgain').style.display = 'flex';
 
-    let board = [];
-    if (answerCreated && gameIsActive) {
-      currentBoard.forEach((card, index) => {
-        // console.log(card.color);
-        board.push(<Card key={index} index={index} card={card} />);
-      });
-    }
-    console.log('showBoard fired');
-    return board;
+  //   let board = [];
+  //   if (answerCreated && gameIsActive) {
+  //     currentBoard.forEach((card, index) => {
+  //       // console.log(card.color);
+  //       board.push(<Card key={index} index={index} card={card} />);
+  //     });
+  //   }
+  //   console.log('showBoard fired');
+  //   return board;
+  // }
+
+  // function runs to initiate game start
+  function startGame() {
+    setGameIsActive(true);
+    setTimerIsOn(true);
+    setCurrentBoard([]);
+    setAnswerCreated(false);
+    setShowSubmitButton('none');
+    handleLevelNumber();
+    generateAnswer();
+    // showBoard();
+    // startTimer
+    //generateAnswer()
+    // showBoard()
   }
+
+  function endGame() {
+    setTimerIsOn(false);
+    setGameIsActive(false);
+  }
+
+  // function LevelTimer() {}
 
   return (
     <div className="App">
       <Logo src={LogoImg} alt="Btty Butts" />
       {/* <Subtitle>Picture Pack: {levelNumber}</Subtitle> */}
       <VolumeButton />
-      <GameContainer id="gameContainer">{showBoard()}</GameContainer>
+      <GameContainer id="gameContainer">
+        <Board />
+      </GameContainer>
       {/* {submitButton()} */}
       <Button
         onClick={() => {
-          setCurrentBoard([]);
-          setAnswerCreated(false);
-          setGameIsActive(true);
-          setShowSubmitButton('none');
-          handleLevelNumber();
-          generateAnswer();
-          showBoard();
+          startGame();
+          // setCurrentBoard([]);
+          // setAnswerCreated(false);
+          // setGameIsActive(true);
+          // setShowSubmitButton('none');
+          // handleLevelNumber();
+          // generateAnswer();
+          // showBoard();
           console.log('just shut button off');
         }}
         style={{ display: showSubmitButton }}
       >
         Keep Playing?
       </Button>
+      <Timer />
     </div>
   );
 }

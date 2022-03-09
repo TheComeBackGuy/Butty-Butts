@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 export const gameIsActiveState = atom({
   key: 'game-is-active-state',
-  default: true,
+  default: false,
 });
 
 export const clickNumber = atom({
@@ -42,4 +42,9 @@ export const totalNumberOfLevelsState = atom({
 export const volumeState = atom({
   key: 'volume-state',
   default: true,
+});
+
+export const timerState = atom({
+  key: 'timer-state',
+  default: false,
 });
