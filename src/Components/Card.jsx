@@ -1,12 +1,16 @@
 import {
   cardsToCompare,
+  gameIsActiveState,
   levelNumberState,
   matchedObjects,
+  volumeState,
 } from '../data/atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import React from 'react';
+import flip from '../sounds/flip.mp3';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 // import { useState } from 'react';
 
@@ -66,6 +70,9 @@ const CardBack = styled.div`
 `;
 
 export default function Card({ index, card }) {
+  const [playFlip] = useSound(flip);
+  const volumeUp = useRecoilValue(volumeState);
+  const gameIsActive = useRecoilValue(gameIsActiveState);
   //   const [numberClicked, setNumberClicked] = useRecoilState(clickNumber);
   const [compareCards, setCompareCards] = useRecoilState(cardsToCompare);
   const matchedObjectsState = useRecoilValue(matchedObjects);
@@ -92,7 +99,12 @@ export default function Card({ index, card }) {
       onClick={(e) => {
         //   if you've clicked two cards
         // and the one you clicked isn't already active or you haven't already solved it
-        if (compareCards.length < 2 && !currentlyClicked && !alreadySolved) {
+        if (
+          compareCards.length < 2 &&
+          !currentlyClicked &&
+          !alreadySolved &&
+          gameIsActive
+        ) {
           // push the card into the set to compare
           setCompareCards((compareCards) => [...compareCards, card]);
           e.currentTarget.firstChild.style.transform = 'rotateY(180deg)';
@@ -100,7 +112,12 @@ export default function Card({ index, card }) {
           e.currentTarget.firstChild.lastChild.style.backgroundSize = '100%';
           e.currentTarget.firstChild.lastChild.style.backgroundColor =
             card.color;
+          if (volumeUp) {
+            playFlip();
+          }
           // console.log(e.currentTarget.firstChild.lastChild.style);
+        } else {
+          // e.currentTarget.firstChild.style.transform = 'rotateZ(180deg)';
         }
         // console.log(e.currentTarget.firstChild.style.transform);
       }}

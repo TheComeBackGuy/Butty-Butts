@@ -8,12 +8,20 @@ import {
   levelNumberState,
   matchedObjects,
   totalNumberOfLevelsState,
+  volumeState,
 } from './data/atoms';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
 import Card from './Components/Card';
 import LogoImg from './images/logo.jpg';
+import VolumeButton from './Components/VolumeButton';
+import flip2 from './sounds/flip2.mp3';
+import { keyframes } from 'styled-components';
+import match from './sounds/matchBell.mp3';
+import spin from './sounds/spin.mp3';
 import styled from 'styled-components';
+import useSound from 'use-sound';
+// import { tada } from 'react-animations';
 import { useState } from 'react';
 
 const Button = styled.button`
@@ -43,14 +51,14 @@ const Logo = styled.img`
   // border: 1px solid purple;
 `;
 
-const Subtitle = styled.h2`
-  text-align: center;
-  font-family: Oswald, sans;
-  font-size: 17px;
-  font-weight: 100;
-  margin: -10px auto 10px auto;
-  color: #2dc4f6;
-`;
+// const Subtitle = styled.h2`
+//   text-align: center;
+//   font-family: Oswald, sans;
+//   font-size: 17px;
+//   font-weight: 100;
+//   margin: -10px auto 10px auto;
+//   color: #2dc4f6;
+// `;
 
 const GameContainer = styled.section`
   display: flex;
@@ -68,6 +76,10 @@ const GameContainer = styled.section`
 `;
 
 export default function App() {
+  const [playFlip] = useSound(flip2);
+  const [playSpin] = useSound(spin);
+  const [playMatch] = useSound(match);
+  const volumeUp = useRecoilValue(volumeState);
   const [showSubmitButton, setShowSubmitButton] = useState('none');
   const [cardsToCompareState, setCardsToCompareState] =
     useRecoilState(cardsToCompare);
@@ -79,6 +91,7 @@ export default function App() {
   const resetLevels = useResetRecoilState(levelNumberState);
   const totalNumberOfLevels = useRecoilValue(totalNumberOfLevelsState);
   const [gameIsActive, setGameIsActive] = useRecoilState(gameIsActiveState);
+  const [winningPair, setWinningPair] = useState(false);
 
   //constant checking for matches
   //pushes to a matchedObjects array if they match
@@ -95,6 +108,9 @@ export default function App() {
             setTimeout(() => {
               document.getElementById(`${card.id}`).firstChild.style.transform =
                 'rotateY(0deg)';
+              if (volumeUp) {
+                playFlip();
+              }
             }, 800);
             setTimeout(() => {
               document.getElementById(
@@ -107,11 +123,22 @@ export default function App() {
           // if they match, throw the objects into an array of solved objects
           console.log('THEY MATCH');
           cardsToCompareState.forEach((card) => {
+            setTimeout(() => {
+              document.getElementById(`${card.id}`).firstChild.style.transform =
+                'rotateY(540deg)';
+              if (volumeUp) {
+                playSpin();
+                playMatch();
+              }
+            }, 800);
             setMatchedObjectsState((matchedObjectsState) => [
               ...matchedObjectsState,
               card,
             ]);
           });
+          for (let i = 0; i < 1; i++) {
+            console.log(matchedObjectsState);
+          }
         }
         // });
 
@@ -130,33 +157,32 @@ export default function App() {
 
   // checking for the end of the game
   useEffect(() => {
-    if (gameIsActive) {
-      console.log('useEffect fired compare');
-      // if the amount of answered boxes === the amount of boxes
-      if (matchedObjectsState.length === 16) {
-        // end the game
-        console.log('game is over');
+    console.log('useEffect fired compare');
+    // if the amount of answered boxes === the amount of boxes
+    if (matchedObjectsState.length === 16) {
+      // end the game
+      console.log('game is over');
 
-        // causes delay in animation of tiles
-        let increaseTime = 0;
-        for (let i = 0; i < currentBoard.length; i++) {
-          // console.log(matchedObjectsState.indexOf(matchedObjectsState[i]));
-          console.log(currentBoard[i].id);
-          setTimeout(() => {
-            // currentBoard[i].firstChild.style.transform = 'rotateY(0deg)';
-            document.getElementById(
-              `${[currentBoard[i].id]}`
-            ).firstChild.style.transform = 'rotateY(0deg)';
-          }, 800 + increaseTime);
-          increaseTime += 20;
-        }
+      setGameIsActive(false);
+      // causes delay in animation of tiles
+      let increaseTime = 0;
+      for (let i = 0; i < currentBoard.length; i++) {
+        // console.log(matchedObjectsState.indexOf(matchedObjectsState[i]));
+        console.log(currentBoard[i].id);
         setTimeout(() => {
-          setShowSubmitButton('flex');
-          console.log('this is the timed button turning on. ');
-        }, 1500);
-
-        setMatchedObjectsState([]);
+          // currentBoard[i].firstChild.style.transform = 'rotateY(0deg)';
+          document.getElementById(
+            `${[currentBoard[i].id]}`
+          ).firstChild.style.transform = 'rotateY(0deg)';
+        }, 800 + increaseTime);
+        increaseTime += 20;
       }
+      setTimeout(() => {
+        setShowSubmitButton('flex');
+        console.log('this is the timed button turning on. ');
+      }, 1500);
+
+      setMatchedObjectsState([]);
     }
   }, [
     matchedObjectsState,
@@ -168,7 +194,16 @@ export default function App() {
     gameIsActive,
   ]);
 
-  useEffect(() => []);
+  function handleShake() {
+    // Button begins to shake
+    const affectedItem = document.getElementById('testBox');
+
+    setWinningPair(true);
+
+    // affectedItem.innerText = 'Hit it';
+    console.log('item is: ');
+    console.log(affectedItem);
+  }
 
   function handleLevelNumber() {
     if (levelNumber < totalNumberOfLevels) {
@@ -177,22 +212,6 @@ export default function App() {
       resetLevels();
     }
   }
-
-  // function submitButton() {
-  //   if (showSubmitButton) {
-  //     return (
-  //       <Button
-  //         id="playAgain"
-  //         onClick={() => {
-  //           // generateAnswer();
-
-  //         }}
-  //       >
-  //         Play Again?
-  //       </Button>
-  //     );
-  //   }
-  // }
 
   const cardColors = [
     'red',
@@ -280,8 +299,8 @@ export default function App() {
   return (
     <div className="App">
       <Logo src={LogoImg} alt="Btty Butts" />
-      <Subtitle>Picture Pack: {levelNumber}</Subtitle>
-
+      {/* <Subtitle>Picture Pack: {levelNumber}</Subtitle> */}
+      <VolumeButton />
       <GameContainer id="gameContainer">{showBoard()}</GameContainer>
       {/* {submitButton()} */}
       <Button
