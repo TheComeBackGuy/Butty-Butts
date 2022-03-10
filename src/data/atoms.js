@@ -1,4 +1,9 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
+
+export const boardCreatedState = atom({
+  key: 'board-created-state',
+  default: true,
+});
 
 export const gameIsActiveState = atom({
   key: 'game-is-active-state',
@@ -44,7 +49,60 @@ export const volumeState = atom({
   default: true,
 });
 
+//timer atoms
 export const timerState = atom({
   key: 'timer-state',
   default: false,
 });
+
+export const startTimerState = atom({
+  key: 'start-timer-state',
+  default: null,
+});
+
+export const endTimerState = atom({
+  key: 'end-timer-state',
+  default: null,
+});
+
+export const currentTimerState = atom({
+  key: 'current-timer-state',
+  default: null,
+});
+
+export const timeInSecondsSelector = selector({
+  key: 'time-in-seconds-selector',
+  get: ({ get }) => {
+    let currentTime = get(currentTimerState);
+    const timerStart = get(startTimerState);
+    // const startSeconds = Math.floor((timerStart / 1000) % 60);
+    const difference = currentTime - timerStart;
+    let seconds = Math.floor((difference / 1000) % 60);
+    let minutes = Math.floor((difference / (1000 * 60)) % 60);
+
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+
+    if (minutes <= 0) {
+      minutes = '00';
+    }
+
+    return `${minutes}:${seconds}`;
+  },
+});
+
+// export const timeInMinutesSelector = selector({
+//   key: 'time-in-minutes-selector',
+//   get: ({ get }) => {
+//     const currentTime = get(currentTimerState);
+//     const timerStart = get(startTimerState);
+//     const difference = currentTime - timerStart;
+
+//     return Math.round(difference);
+//   },
+// });

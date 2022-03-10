@@ -101,7 +101,8 @@ export default function App() {
 
   useEffect(() => {
     setGameIsActive(true);
-  }, [setGameIsActive]);
+    generateAnswer();
+  }, [setGameIsActive, generateAnswer]);
 
   //constant checking for matches
   //pushes to a matchedObjects array if they match
@@ -281,8 +282,6 @@ export default function App() {
     // return;}
   }
 
-  generateAnswer();
-
   // /** @showBoard takes the answer array and displays it by plugging the values into Card components
   //  */
   // function showBoard() {
@@ -308,10 +307,6 @@ export default function App() {
     setShowSubmitButton('none');
     handleLevelNumber();
     generateAnswer();
-    // showBoard();
-    // startTimer
-    //generateAnswer()
-    // showBoard()
   }
 
   return (

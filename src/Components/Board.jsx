@@ -1,22 +1,20 @@
-import { currentBoardState, gameIsActiveState } from '../data/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import Card from './Card';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { boardCreatedState } from '../data/atoms';
+import { currentBoardState } from '../data/atoms';
 
+/*** @Board is always running */
 export default function Board() {
-  //   const answerCreated = useRecoilValue(answerCreated);
-  const gameIsActive = useRecoilValue(gameIsActiveState);
   const currentBoard = useRecoilValue(currentBoardState);
-  // document.getElementById('playAgain').style.display = 'flex';
-
+  const [boardCreated, setBoardCreated] = useRecoilState(boardCreatedState);
   let board = [];
-  //   if (gameIsActive) {
+
   currentBoard.forEach((card, index) => {
-    // console.log(card.color);
     board.push(<Card key={index} index={index} card={card} />);
   });
-  //   }
   console.log('showBoard component re-fired');
+  setBoardCreated(true);
   return board;
 }

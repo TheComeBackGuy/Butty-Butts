@@ -3,10 +3,11 @@ import {
   gameIsActiveState,
   levelNumberState,
   matchedObjects,
+  startTimerState,
   timerState,
   volumeState,
 } from '../data/atoms';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import React from 'react';
 import flip from '../sounds/flip.mp3';
@@ -79,6 +80,8 @@ export default function Card({ index, card }) {
   const matchedObjectsState = useRecoilValue(matchedObjects);
   const roundNumber = useRecoilValue(levelNumberState);
   const [timerIsOn, setTimerIsOn] = useRecoilState(timerState);
+  const [startTime, setStartTime] = useRecoilState(startTimerState);
+
   // const [bgImage, setBgImage] = useState('');
 
   // let bgImage = { backgroundImage: `url(${this.state})` };
@@ -101,7 +104,10 @@ export default function Card({ index, card }) {
       onClick={(e) => {
         // start timer on first click
         if (!timerIsOn) {
+          setStartTime(new Date().getTime());
+          console.log('Start Time set for: ' + startTime);
           setTimerIsOn(true);
+          console.log('timerIsOn fired');
         }
 
         //   if you've clicked two cards
