@@ -10,6 +10,7 @@ import {
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import React from 'react';
+import bgTile from '../images/backgroundTile.gif';
 import flip from '../sounds/flip.mp3';
 import styled from 'styled-components';
 import useSound from 'use-sound';
@@ -56,6 +57,8 @@ const CardFront = styled.div`
   border: 2px solid lightblue;
   border-radius: 15px;
   backface-visibility: hidden;
+  background-image: url(${bgTile});
+  background-repeat: repeat;
 `;
 
 const CardBack = styled.div`

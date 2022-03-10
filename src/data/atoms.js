@@ -84,6 +84,10 @@ export const timeInSecondsSelector = selector({
       seconds = '0' + seconds;
     }
 
+    if (seconds <= 0) {
+      seconds = '00';
+    }
+
     if (minutes < 10) {
       minutes = '0' + minutes;
     }
