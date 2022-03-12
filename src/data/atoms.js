@@ -7,7 +7,7 @@ export const boardCreatedState = atom({
 
 export const gameIsActiveState = atom({
   key: 'game-is-active-state',
-  default: false,
+  default: true,
 });
 
 export const clickNumber = atom({
@@ -80,24 +80,32 @@ export const timeInSecondsSelector = selector({
     let seconds = Math.floor((difference / 1000) % 60);
     let minutes = Math.floor((difference / (1000 * 60)) % 60);
 
+    /*** 
+    a negative number initially displays, so seconds and minutes
+    have to be seet to zero 
+    * */
+    if (seconds <= 0) {
+      seconds = '0';
+    }
+    if (minutes <= 0) {
+      minutes = '0';
+    }
+
+    //a zero is added if either number is lower than ten
     if (seconds < 10) {
       seconds = '0' + seconds;
     }
-
-    if (seconds <= 0) {
-      seconds = '00';
-    }
-
     if (minutes < 10) {
       minutes = '0' + minutes;
     }
 
-    if (minutes <= 0) {
-      minutes = '00';
-    }
-
     return `${minutes}:${seconds}`;
   },
+});
+
+export const timeRecordsState = atom({
+  key: 'time-records-state',
+  default: [],
 });
 
 // export const timeInMinutesSelector = selector({

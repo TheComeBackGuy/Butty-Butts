@@ -1,3 +1,5 @@
+import '../index.css';
+
 import {
   cardsToCompare,
   gameIsActiveState,
@@ -7,7 +9,7 @@ import {
   timerState,
   volumeState,
 } from '../data/atoms';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import React from 'react';
 import bgTile from '../images/backgroundTile.gif';
@@ -33,12 +35,12 @@ const CardContainer = styled.button`
   min-width: 25px;
   // height: 100px;
   aspect-ratio: 1/1;
-  // border: 2px solid black;
   perspective: 1000px;
   transition: 0.8s;
   transform-style: preserve-3d;
   border: none;
   margin: 5px 5px;
+  border-radius: 15px;
   /* border: 3px solid red; */
   &:hover ${CardInner} {
     cursor: pointer;
@@ -54,14 +56,17 @@ const CardFront = styled.div`
   height: 100%;
   background-color: white;
   -webkit-backface-visibility: hidden; /* Safari */
-  border: 2px solid lightblue;
+  border: 3px solid #4dc9fd;
   border-radius: 15px;
   backface-visibility: hidden;
-  background-image: url(${bgTile});
+  // background-image: url(${bgTile});
   background-repeat: repeat;
+
+  // box-shadow: 0px 5px 5px lightgrey;
 `;
 
 const CardBack = styled.div`
+  // box-shadow: 0px 5px 5px lightgrey;
   position: absolute;
   display: flex;
   align-items: center;

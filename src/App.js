@@ -5,21 +5,17 @@ import {
   cardsToCompare,
   currentBoardState,
   gameIsActiveState,
-  levelNumberState,
   matchedObjects,
+  timeInSecondsSelector,
+  timeRecordsState,
   timerState,
-  totalNumberOfLevelsState,
   volumeState,
 } from './data/atoms';
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Board from './Components/Board';
 import LogoImg from './images/logo.jpg';
+import RoundSummary from './Components/RoundSummary';
 import Timer from './Components/Timer';
 import VolumeButton from './Components/VolumeButton';
 import flip2 from './sounds/flip2.mp3';
@@ -30,24 +26,6 @@ import useSound from 'use-sound';
 // import { tada } from 'react-animations';
 import { useState } from 'react';
 
-const Button = styled.button`
-  display: flex;
-  margin: 30px auto;
-  padding: 10px;
-  border: 1px solid pink;
-  background-color: white;
-  color: pink;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: 1s ease-in-out;
-  &:disabled {
-    transition: 1s ease-in-out;
-    display: none;
-    // border: 1px solid lightgrey;
-    // color: lightgrey;
-  }
-`;
-
 const Logo = styled.img`
   // text-align: center;
   // font-family: 'Luckiest Guy', sans;
@@ -57,25 +35,17 @@ const Logo = styled.img`
   // border: 1px solid purple;
 `;
 
-// const Subtitle = styled.h2`
-//   text-align: center;
-//   font-family: Oswald, sans;
-//   font-size: 17px;
-//   font-weight: 100;
-//   margin: -10px auto 10px auto;
-//   color: #2dc4f6;
-// `;
-
 const GameContainer = styled.section`
   display: flex;
-  width: 100%;
+  // width: inherit;
+  height: fit-content;
   min-width: 225px;
-  // aspect-ratio: 1/1;
   flex-flow: row wrap;
   margin: 0 auto;
   align-items: flex-start;
   justify-content: center;
   // border: 1px solid red;
+
   @media (max-width: 600px) {
     width: inherit;
   }
@@ -94,15 +64,50 @@ export default function App() {
   const [answerCreated, setAnswerCreated] = useState(false);
   const [matchedObjectsState, setMatchedObjectsState] =
     useRecoilState(matchedObjects);
-  const [levelNumber, setLevelNumber] = useRecoilState(levelNumberState);
-  const resetLevels = useResetRecoilState(levelNumberState);
-  const totalNumberOfLevels = useRecoilValue(totalNumberOfLevelsState);
   const [gameIsActive, setGameIsActive] = useRecoilState(gameIsActiveState);
+  const setTimeRecord = useSetRecoilState(timeRecordsState);
+  const time = useRecoilValue(timeInSecondsSelector);
 
+  //starts initial game
   useEffect(() => {
-    setGameIsActive(true);
+    // setGameIsActive(true);
+
+    function generateAnswer() {
+      // if we haven't already created an answer
+      if (!answerCreated && gameIsActive) {
+        console.log('generateAnswer fired');
+        const answer = [];
+
+        //increase is there because the list of colors needs to be looped over twice so it has matches
+        let increase = 0;
+        for (let h = 0; h < 2; h++) {
+          for (let i = 0; i < cardColors.length; i++) {
+            // console.log(i);
+            //create and push an object for each color
+            answer.push({
+              color: cardColors[i],
+              image: i,
+              // we're addingincrease to i so we have sequential id's to call later
+              id: i + increase,
+            });
+          }
+          increase = cardColors.length;
+        }
+        //return array
+        // console.log(answer);
+
+        // use the Fisher-yates shuffle to create a random answer
+        shuffle(answer);
+        setCurrentBoard(answer);
+
+        // set to true so answer won't run again and cause an infinite loop
+        setAnswerCreated(true);
+      }
+      // return;}
+    }
+
     generateAnswer();
-  }, [setGameIsActive, generateAnswer]);
+  });
 
   //constant checking for matches
   //pushes to a matchedObjects array if they match
@@ -175,8 +180,7 @@ export default function App() {
     if (matchedObjectsState.length === 16) {
       // end the game
       console.log('game is over');
-      // endGame();
-      // causes delay in animation of tiles
+      setTimeRecord((timeRecord) => [...timeRecord, time]);
       let increaseTime = 0;
       for (let i = 0; i < currentBoard.length; i++) {
         // console.log(matchedObjectsState.indexOf(matchedObjectsState[i]));
@@ -207,15 +211,9 @@ export default function App() {
     setGameIsActive,
     gameIsActive,
     setTimerIsOn,
+    setTimeRecord,
+    time,
   ]);
-
-  function handleLevelNumber() {
-    if (levelNumber < totalNumberOfLevels) {
-      setLevelNumber(levelNumber + 1);
-    } else if (levelNumber === totalNumberOfLevels) {
-      resetLevels();
-    }
-  }
 
   const cardColors = [
     'red',
@@ -248,40 +246,6 @@ export default function App() {
     return array;
   }
 
-  function generateAnswer() {
-    // if we haven't already created an answer
-    if (!answerCreated && gameIsActive) {
-      console.log('generateAnswer fired');
-      const answer = [];
-
-      //increase is there because the list of colors needs to be looped over twice so it has matches
-      let increase = 0;
-      for (let h = 0; h < 2; h++) {
-        for (let i = 0; i < cardColors.length; i++) {
-          // console.log(i);
-          //create and push an object for each color
-          answer.push({
-            color: cardColors[i],
-            image: i,
-            // we're addingincrease to i so we have sequential id's to call later
-            id: i + increase,
-          });
-        }
-        increase = cardColors.length;
-      }
-      //return array
-      // console.log(answer);
-
-      // use the Fisher-yates shuffle to create a random answer
-      shuffle(answer);
-      setCurrentBoard(answer);
-
-      // set to true so answer won't run again and cause an infinite loop
-      setAnswerCreated(true);
-    }
-    // return;}
-  }
-
   // /** @showBoard takes the answer array and displays it by plugging the values into Card components
   //  */
   // function showBoard() {
@@ -299,18 +263,19 @@ export default function App() {
   // }
 
   // function runs to initiate game start
-  function startGame() {
-    setGameIsActive(true);
-    // setTimerIsOn(true);
-    setCurrentBoard([]);
-    setAnswerCreated(false);
-    setShowSubmitButton('none');
-    handleLevelNumber();
-    generateAnswer();
-  }
+  // function startGame() {
+  //   // setGameIsActive(true);
+  //   setTimerIsOn(true);
+  //   setCurrentBoard([]);
+  //   setAnswerCreated(false);
+  //   setShowSubmitButton('none');
+  //   generateAnswer();
+  // }
 
   return (
     <div className="App">
+      <RoundSummary />
+
       <Logo src={LogoImg} alt="Btty Butts" />
       {/* <Subtitle>Picture Pack: {levelNumber}</Subtitle> */}
       <VolumeButton />
@@ -318,22 +283,7 @@ export default function App() {
         <Board />
       </GameContainer>
       {/* {submitButton()} */}
-      <Button
-        onClick={() => {
-          startGame();
-          // setCurrentBoard([]);
-          // setAnswerCreated(false);
-          // setGameIsActive(true);
-          // setShowSubmitButton('none');
-          // handleLevelNumber();
-          // generateAnswer();
-          // showBoard();
-          console.log('just shut button off');
-        }}
-        style={{ display: showSubmitButton }}
-      >
-        Keep Playing?
-      </Button>
+
       <Timer />
     </div>
   );
