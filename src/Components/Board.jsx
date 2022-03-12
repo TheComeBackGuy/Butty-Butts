@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Card from './Card';
 import React from 'react';
@@ -8,7 +8,7 @@ import { currentBoardState } from '../data/atoms';
 /*** @Board is always running */
 export default function Board() {
   const currentBoard = useRecoilValue(currentBoardState);
-  const [boardCreated, setBoardCreated] = useRecoilState(boardCreatedState);
+  const setBoardCreated = useSetRecoilState(boardCreatedState);
   let board = [];
 
   currentBoard.forEach((card, index) => {
