@@ -86,73 +86,75 @@ export default function RoundSummary() {
 
   const successPage = useRef(null);
 
-  function playRandomFirework() {
-    const firework = Math.floor(Math.random() * 3);
-    switch (firework) {
-      case 0:
-        playExplosion1();
-        break;
-      case 1:
-        playExplosion2();
-        break;
-      case 2:
-        playExplosion3();
-        break;
-      default:
-        break;
-    }
-  }
-
-  function runFireworks() {
-    console.log('FiIREWORKS!!!!');
-    let duration = 2 * 1000;
-    let animationEnd = Date.now() + duration;
-    let defaults = {
-      startVelocity: 30,
-      spread: 360,
-      ticks: 60,
-      zIndex: 0,
-    };
-
-    function randomInRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-    let interval = setInterval(function () {
-      let timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
-      //   playExplosion();
-      playRandomFirework();
-      let particleCount = 50 * (timeLeft / duration);
-      // since particles fall down, start a bit higher than random
-      Confetti(
-        Object.assign({}, defaults, {
-          particleCount,
-          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-          zIndex: 100,
-        })
-      );
-      Confetti(
-        Object.assign({}, defaults, {
-          particleCount,
-          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-          zIndex: 100,
-        })
-      );
-    }, 250);
-  }
   useEffect(() => {
     // setConfettiIsOn(false);
     // const confettiTimer = setInterval(() => {}, 1000);
+
+    function playRandomFirework() {
+      const firework = Math.floor(Math.random() * 3);
+      switch (firework) {
+        case 0:
+          playExplosion1();
+          break;
+        case 1:
+          playExplosion2();
+          break;
+        case 2:
+          playExplosion3();
+          break;
+        default:
+          break;
+      }
+    }
+
+    function runFireworks() {
+      console.log('FiIREWORKS!!!!');
+      let duration = 2 * 1000;
+      let animationEnd = Date.now() + duration;
+      let defaults = {
+        startVelocity: 30,
+        spread: 360,
+        ticks: 60,
+        zIndex: 0,
+      };
+
+      function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+      let interval = setInterval(function () {
+        let timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+        //   playExplosion();
+        playRandomFirework();
+        let particleCount = 50 * (timeLeft / duration);
+        // since particles fall down, start a bit higher than random
+        Confetti(
+          Object.assign({}, defaults, {
+            particleCount,
+            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+            zIndex: 100,
+          })
+        );
+        Confetti(
+          Object.assign({}, defaults, {
+            particleCount,
+            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+            zIndex: 100,
+          })
+        );
+      }, 250);
+    }
+
     if (gameIsActive) {
       successPage.current.style.display = 'none';
     } else {
       successPage.current.style.display = 'flex';
       runFireworks();
     }
-  }, [gameIsActive]);
+  }, [gameIsActive, playExplosion1, playExplosion2, playExplosion3]);
 
   return (
     <Summary ref={successPage}>
