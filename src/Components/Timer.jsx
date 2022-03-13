@@ -22,6 +22,7 @@ export default function Timer() {
     if (timer) {
       const timer = setInterval(() => {
         setCurrentTimer(new Date().getTime());
+        console.log('timer fired');
       }, 1000);
       return () => clearInterval(timer);
     }
@@ -30,6 +31,6 @@ export default function Timer() {
   if (timer) {
     return <TimerStyle>{time}</TimerStyle>;
   } else {
-    return <TimerStyle>Timer is off</TimerStyle>;
+    return <TimerStyle></TimerStyle>;
   }
 }
