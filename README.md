@@ -1,4 +1,4 @@
-![image  align="center"](./src/images/fb-card3.jpg)
+![image  align="center"](./src/images/fb-card.jpg)
 
 ### Project Link
 
