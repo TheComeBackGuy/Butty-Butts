@@ -17,3 +17,7 @@
 3.  **Theming**
 
     I was mainly looking to make something fun and silly and when my fiancee suggested butts I was like "that's that". After posting the first version on my Facebook, one of my friend's daughters was apparently calling it "Butty Butts" and that just felt like the exact amount of maturity the name of this project required.
+
+4.  **Art**
+
+    As an illustrator I had a lot of fun drawing all thsee ridiculous butts. My art is zany and having a chance to just draw a bunch of silly looking butts was really fun. These were drawn in Clip Studio Paint and colored in Photoshop
