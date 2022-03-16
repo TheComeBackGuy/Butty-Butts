@@ -41,7 +41,7 @@ export const levelNumberState = atom({
 });
 export const totalNumberOfLevelsState = atom({
   key: 'total-number-of-levels-state',
-  default: 2,
+  default: 3,
 });
 
 export const volumeState = atom({
