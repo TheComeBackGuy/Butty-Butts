@@ -77,6 +77,7 @@ export default function RoundSummary() {
   const [playExplosion3] = useSound(Firework3);
 
   function handleLevelNumber() {
+    console.log('handleLevelNumber just ran');
     if (levelNumber < totalNumberOfLevels) {
       setLevelNumber(levelNumber + 1);
     } else if (levelNumber === totalNumberOfLevels) {
@@ -154,7 +155,13 @@ export default function RoundSummary() {
       successPage.current.style.display = 'flex';
       runFireworks();
     }
-  }, [gameIsActive, playExplosion1, playExplosion2, playExplosion3]);
+  }, [
+    gameIsActive,
+    playExplosion1,
+    playExplosion2,
+    playExplosion3,
+    levelNumber,
+  ]);
 
   return (
     <Summary ref={successPage}>

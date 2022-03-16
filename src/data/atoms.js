@@ -44,6 +44,24 @@ export const totalNumberOfLevelsState = atom({
   default: 3,
 });
 
+export const LevelThemeSelector = selector({
+  key: 'level-theme-selector',
+  get: ({ get }) => {
+    const currrentLevel = get(levelNumberState);
+
+    switch (currrentLevel) {
+      case 1:
+        return 'Butts 1';
+      case 2:
+        return 'Butts 2';
+      case 3:
+        return 'Animal Butts';
+      default:
+        break;
+    }
+  },
+});
+
 export const volumeState = atom({
   key: 'volume-state',
   default: true,
@@ -107,14 +125,3 @@ export const timeRecordsState = atom({
   key: 'time-records-state',
   default: [],
 });
-
-// export const timeInMinutesSelector = selector({
-//   key: 'time-in-minutes-selector',
-//   get: ({ get }) => {
-//     const currentTime = get(currentTimerState);
-//     const timerStart = get(startTimerState);
-//     const difference = currentTime - timerStart;
-
-//     return Math.round(difference);
-//   },
-// });

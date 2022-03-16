@@ -15,6 +15,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Board from './Components/Board';
 import LogoImg from './images/logo.jpg';
+import PicturePackSelector from './Components/PicturePackSelector';
 import RoundSummary from './Components/RoundSummary';
 import Timer from './Components/Timer';
 import VolumeButton from './Components/VolumeButton';
@@ -278,7 +279,19 @@ export default function App() {
 
       <Logo src={LogoImg} alt="Btty Butts" />
       {/* <Subtitle>Picture Pack: {levelNumber}</Subtitle> */}
-      <VolumeButton />
+
+      <div
+        style={{
+          margin: '5px 0 20px 0',
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+        }}
+      >
+        <VolumeButton />
+        <PicturePackSelector />
+      </div>
       <GameContainer id="gameContainer">
         <Board />
       </GameContainer>
