@@ -1,12 +1,13 @@
 import '../index.css';
 
-import React, { useEffect, useRef } from 'react';
 import {
+  PicturePackLockState,
   gameIsActiveState,
   levelNumberState,
   timeRecordsState,
   totalNumberOfLevelsState,
 } from '../data/atoms';
+import React, { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
 import Confetti from 'canvas-confetti';
@@ -71,18 +72,23 @@ export default function RoundSummary() {
   const resetLevels = useResetRecoilState(levelNumberState);
   const totalNumberOfLevels = useRecoilValue(totalNumberOfLevelsState);
   const [levelNumber, setLevelNumber] = useRecoilState(levelNumberState);
+  const picturePack = useRecoilValue(PicturePackLockState);
+
   //explosions found here: www.fesliyanstudios.com
   const [playExplosion1] = useSound(Firework1);
   const [playExplosion2] = useSound(Firework2);
   const [playExplosion3] = useSound(Firework3);
 
   function handleLevelNumber() {
-    console.log('handleLevelNumber just ran');
-    if (levelNumber < totalNumberOfLevels) {
-      setLevelNumber(levelNumber + 1);
-    } else if (levelNumber === totalNumberOfLevels) {
-      resetLevels();
+    console.log(`handleLevelNumber just ran and changed ${levelNumber}`);
+    if (!picturePack) {
+      if (parseInt(levelNumber) < totalNumberOfLevels) {
+        setLevelNumber(parseInt(levelNumber) + 1);
+      } else if (parseInt(levelNumber) === totalNumberOfLevels) {
+        resetLevels();
+      }
     }
+    console.log(`to ${levelNumber}`);
   }
 
   const successPage = useRef(null);

@@ -1,7 +1,7 @@
+import React, { useEffect } from 'react';
 import { levelNumberState, timerState } from '../data/atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import React from 'react';
 import styled from 'styled-components';
 
 const Select = styled.select`
@@ -18,10 +18,11 @@ const Select = styled.select`
 export default function PicturePackSelector() {
   const [level, setLevel] = useRecoilState(levelNumberState);
   const timer = useRecoilValue(timerState);
+  useEffect(() => {
+    console.log(`Level changed to  ${level} by PicturePackSelector`);
+  }, [level]);
 
   function handlePack(e) {
-    console.log(`Level changed to  ${level} by PicturePackSelector`);
-
     e.preventDefault();
     setLevel(e.target.value);
   }
@@ -30,9 +31,9 @@ export default function PicturePackSelector() {
       <form>
         <label>
           <Select value={level} onChange={handlePack}>
-            <option value={1}>Butts 1</option>
-            <option value={2}>Butts 2</option>
-            <option value={3}>Animal Butts</option>
+            <option value={parseInt(1)}>Butts 1</option>
+            <option value={parseInt(2)}>Butts 2</option>
+            <option value={parseInt(3)}>Animal Butts</option>
           </Select>
         </label>
       </form>

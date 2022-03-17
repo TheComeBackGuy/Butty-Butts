@@ -1,5 +1,10 @@
 import { atom, selector } from 'recoil';
 
+export const PicturePackLockState = atom({
+  key: 'picture-pack-lock-state',
+  default: false,
+});
+
 export const boardCreatedState = atom({
   key: 'board-created-state',
   default: true,

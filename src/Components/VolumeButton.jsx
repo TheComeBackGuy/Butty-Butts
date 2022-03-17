@@ -10,7 +10,6 @@ const Volume = styled.button`
   background-color: transparent;
   color: #46b9ee;
   font-size: 20px;
-  margin-right: 20px;
 `;
 
 export default function VolumeButton() {

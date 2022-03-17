@@ -14,6 +14,7 @@ import {
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Board from './Components/Board';
+import LockPicturePack from './Components/LockPicturePack';
 import LogoImg from './images/logo.jpg';
 import PicturePackSelector from './Components/PicturePackSelector';
 import RoundSummary from './Components/RoundSummary';
@@ -50,6 +51,16 @@ const GameContainer = styled.section`
   @media (max-width: 600px) {
     width: inherit;
   }
+`;
+
+const SettingsContainer = styled.ul`
+  margin: 5px auto 20px auto;
+  display: flex;
+  flex-flow: row nowrap;
+  list-style-type: none;
+  align-items: flex-start;
+  justify-content: center;
+  // margin-right: 10px;
 `;
 
 export default function App() {
@@ -280,18 +291,17 @@ export default function App() {
       <Logo src={LogoImg} alt="Btty Butts" />
       {/* <Subtitle>Picture Pack: {levelNumber}</Subtitle> */}
 
-      <div
-        style={{
-          margin: '5px 0 20px 0',
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-        }}
-      >
-        <VolumeButton />
-        <PicturePackSelector />
-      </div>
+      <SettingsContainer>
+        <li style={{ marginRight: '20px' }}>
+          <VolumeButton />
+        </li>
+        <li style={{ marginRight: '20px' }}>
+          <PicturePackSelector />
+        </li>
+        <li>
+          <LockPicturePack />
+        </li>
+      </SettingsContainer>
       <GameContainer id="gameContainer">
         <Board />
       </GameContainer>
