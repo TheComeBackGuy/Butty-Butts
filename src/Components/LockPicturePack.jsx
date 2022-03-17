@@ -1,7 +1,7 @@
 import { BsFillLockFill, BsFillUnlockFill } from 'react-icons/bs';
-import React, { useEffect } from 'react';
 
 import { PicturePackLockState } from '../data/atoms';
+import React from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 
