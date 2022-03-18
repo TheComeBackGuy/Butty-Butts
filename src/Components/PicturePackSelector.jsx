@@ -5,12 +5,12 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 const Select = styled.select`
-  border: 1px solid var(--blue);
-  color: var(--blue);
-  border-radius: 3px;
+  border: none;
+  color: #1b7096;
+  border-radius: 5px;
   padding: 3px;
   &:disabled {
-    border: 1px solid lightgrey;
+    // border: 1px solid lightgrey;
     color: lightgrey;
   }
 `;

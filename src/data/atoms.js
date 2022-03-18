@@ -93,8 +93,21 @@ export const currentTimerState = atom({
   default: null,
 });
 
-export const timeInSecondsSelector = selector({
+export const TimeInSecondsSelector = selector({
   key: 'time-in-seconds-selector',
+  get: ({ get }) => {
+    let currentTime = get(currentTimerState);
+    const timerStart = get(startTimerState);
+    const difference = currentTime - timerStart;
+
+    let seconds = Math.floor((difference / 1000) % 60);
+
+    return seconds;
+  },
+});
+
+export const TimerResultSelector = selector({
+  key: 'time-results-selector',
   get: ({ get }) => {
     let currentTime = get(currentTimerState);
     const timerStart = get(startTimerState);

@@ -56,7 +56,7 @@ const Button = styled.button`
   font-weight: 600;
   border-radius: 10px;
   cursor: pointer;
-  transition: 0.5s ease-in-out;
+  transition: 0.1s ease-in-out;
 
   &:hover {
     // transition: 1s ease-in-out;

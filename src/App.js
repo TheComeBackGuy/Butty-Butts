@@ -2,11 +2,11 @@ import './index.css';
 
 import React, { useEffect } from 'react';
 import {
+  TimerResultSelector,
   cardsToCompare,
   currentBoardState,
   gameIsActiveState,
   matchedObjects,
-  timeInSecondsSelector,
   timeRecordsState,
   timerState,
   volumeState,
@@ -15,7 +15,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Board from './Components/Board';
 import LockPicturePack from './Components/LockPicturePack';
-import LogoImg from './images/logo.jpg';
+import LogoImg from './images/logo.png';
 import PicturePackSelector from './Components/PicturePackSelector';
 import RoundSummary from './Components/RoundSummary';
 import Timer from './Components/Timer';
@@ -29,12 +29,8 @@ import useSound from 'use-sound';
 import { useState } from 'react';
 
 const Logo = styled.img`
-  // text-align: center;
-  // font-family: 'Luckiest Guy', sans;
-  // font-weight: 200;
   margin: 20px auto 0 auto;
-  // color: #2dc4f6;
-  // border: 1px solid purple;
+  z-index: 10;
 `;
 
 const GameContainer = styled.section`
@@ -46,7 +42,6 @@ const GameContainer = styled.section`
   margin: 0 auto;
   align-items: flex-start;
   justify-content: center;
-  // border: 1px solid red;
 
   @media (max-width: 600px) {
     width: inherit;
@@ -54,11 +49,16 @@ const GameContainer = styled.section`
 `;
 
 const SettingsContainer = styled.ul`
-  margin: 5px auto 20px auto;
+  margin: -30px auto 20px auto;
   display: flex;
+  background-color: var(--blue);
+  padding: 20px 20px 5px 20px;
+  width: fit-content;
+  border: 3px solid #1b7096;
+  border-radius: 10px;
   flex-flow: row nowrap;
   list-style-type: none;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   // margin-right: 10px;
 `;
@@ -78,7 +78,7 @@ export default function App() {
     useRecoilState(matchedObjects);
   const [gameIsActive, setGameIsActive] = useRecoilState(gameIsActiveState);
   const setTimeRecord = useSetRecoilState(timeRecordsState);
-  const time = useRecoilValue(timeInSecondsSelector);
+  const time = useRecoilValue(TimerResultSelector);
 
   //starts initial game
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function App() {
     function generateAnswer() {
       // if we haven't already created an answer
       if (!answerCreated && gameIsActive) {
-        console.log('generateAnswer fired');
+        // console.log('generateAnswer fired');
         const answer = [];
 
         //increase is there because the list of colors needs to be looped over twice so it has matches
@@ -127,7 +127,7 @@ export default function App() {
     if (gameIsActive) {
       //if you've flipped 2 cards
       if (cardsToCompareState.length === 2) {
-        console.log('useEffect fired to compare cards');
+        // console.log('useEffect fired to compare cards');
         //if the colors don't match
         if (cardsToCompareState[0].color !== cardsToCompareState[1].color) {
           cardsToCompareState.forEach((card) => {
@@ -146,10 +146,10 @@ export default function App() {
               ).firstChild.lastChild.style.backgroundColor = 'transparent';
             }, 1200);
           });
-          console.log('NO MATCH');
+          // console.log('NO MATCH');
         } else {
           // if they match, throw the objects into an array of solved objects
-          console.log('THEY MATCH');
+          // console.log('THEY MATCH');
           cardsToCompareState.forEach((card) => {
             setTimeout(() => {
               document.getElementById(`${card.id}`).firstChild.style.transform =
@@ -164,7 +164,7 @@ export default function App() {
               card,
             ]);
           });
-          console.log(matchedObjectsState);
+          // console.log(matchedObjectsState);
         }
         // });
 
@@ -205,10 +205,10 @@ export default function App() {
         }, 800 + increaseTime);
         increaseTime += 20;
       }
-      setTimeout(() => {
-        setShowSubmitButton('flex');
-        console.log('this is the timed button turning on. ');
-      }, 1500);
+      // setTimeout(() => {
+      //   setShowSubmitButton('flex');
+      //   console.log('this is the timed button turning on. ');
+      // }, 1500);
 
       setMatchedObjectsState([]);
       setTimerIsOn(false);

@@ -8,8 +8,10 @@ import { volumeState } from '../data/atoms';
 const Volume = styled.button`
   border: none;
   background-color: transparent;
-  color: #46b9ee;
-  font-size: 20px;
+  border-radius: 5px;
+  padding: 3px;
+  color: var(--darkBlue);
+  font-size: 17px;
 `;
 
 export default function VolumeButton() {
@@ -17,7 +19,7 @@ export default function VolumeButton() {
 
   function handleIcon() {
     if (volumeUp) {
-      return <RiVolumeUpLine />;
+      return <RiVolumeUpLine style={{}} />;
     } else {
       return <RiVolumeMuteLine />;
     }

@@ -12,10 +12,12 @@ import {
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import React from 'react';
-import bgTile from '../images/backgroundTile.gif';
+import bgTile from '../images/card-front.jpg';
 import flip from '../sounds/flip.mp3';
 import styled from 'styled-components';
 import useSound from 'use-sound';
+
+// import CardIcon from '../images/card-back.gif';
 
 // import { useState } from 'react';
 
@@ -26,6 +28,7 @@ const CardInner = styled.div`
   text-align: center;
   transition: transform 0.8s;
   transform-style: preserve-3d;
+  transition: 0.3s ease-out;
 `;
 
 const CardContainer = styled.button`
@@ -36,11 +39,11 @@ const CardContainer = styled.button`
   // height: 100px;
   aspect-ratio: 1/1;
   perspective: 1000px;
-  transition: 0.8s;
   transform-style: preserve-3d;
   border: none;
   margin: 5px 5px;
   border-radius: 15px;
+  filter: drop-shadow(0 0.1rem 0.15rem #fe8855);
   /* border: 3px solid red; */
   &:hover ${CardInner} {
     cursor: pointer;
@@ -56,13 +59,12 @@ const CardFront = styled.div`
   height: 100%;
   background-color: white;
   -webkit-backface-visibility: hidden; /* Safari */
-  border: 3px solid #4dc9fd;
+  border: 3px solid white;
   border-radius: 15px;
   backface-visibility: hidden;
-  // background-image: url(${bgTile});
-  background-repeat: repeat;
-
-  // box-shadow: 0px 5px 5px lightgrey;
+  background-image: url(${bgTile});
+  background-repeat: no-repeat;
+  background-size: 101%;
 `;
 
 const CardBack = styled.div`
@@ -74,6 +76,7 @@ const CardBack = styled.div`
   width: 100%;
   height: 100%;
   transform: rotateY(180deg);
+  border: 3px solid white;
   border-radius: 15px;
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
@@ -151,7 +154,9 @@ export default function Card({ index, card }) {
               // backgroundColor: card
             }
           }
-        ></CardFront>
+        >
+          {/* <img src={CardIcon} alt="Butt Icon" /> */}
+        </CardFront>
         <CardBack>{/* <h1> {card[0].toUpperCase()}</h1> */}</CardBack>
       </CardInner>
     </CardContainer>

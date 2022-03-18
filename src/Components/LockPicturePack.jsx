@@ -6,9 +6,9 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 
 const Button = styled.button`
-  color: var(--blue);
-  background-color: white;
-  //   border-radius: 4px;
+  color: var(--darkBlue);
+  background-color: transparent;
+  border-radius: 5px;
   border: none;
   font-size: 17px;
   padding: 3px;
@@ -19,9 +19,9 @@ export default function LockPicturePack() {
 
   function displayLock() {
     if (picturePack) {
-      return <BsFillLockFill />;
+      return <BsFillLockFill style={{ backgroundColor: 'transparent' }} />;
     }
-    return <BsFillUnlockFill />;
+    return <BsFillUnlockFill style={{ backgroundColor: 'transparent' }} />;
   }
 
   return (
