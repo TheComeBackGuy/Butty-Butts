@@ -32,8 +32,11 @@ export default function Clock() {
   const secondHandRef = useRef(null);
   const seconds = useRecoilValue(TimeInSecondsSelector);
 
+  
+
   useEffect(() => {
     console.log(secondHandRef.current.style);
+
     secondHandRef.current.style.transform = `rotate(${seconds * 6}deg)`;
   }, [seconds]);
 

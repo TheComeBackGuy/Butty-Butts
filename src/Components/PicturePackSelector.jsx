@@ -34,6 +34,7 @@ export default function PicturePackSelector() {
             <option value={parseInt(1)}>Butts 1</option>
             <option value={parseInt(2)}>Butts 2</option>
             <option value={parseInt(3)}>Animal Butts</option>
+            <option value={parseInt(4)}>Butts 3</option>
           </Select>
         </label>
       </form>
@@ -46,6 +47,7 @@ export default function PicturePackSelector() {
           <option value={1}>Butts 1</option>
           <option value={2}>Butts 2</option>
           <option value={3}>Animal Butts</option>
+          <option value={parseInt(4)}>Butts 3</option>
         </Select>
       </label>
     </form>

@@ -46,7 +46,7 @@ export const levelNumberState = atom({
 });
 export const totalNumberOfLevelsState = atom({
   key: 'total-number-of-levels-state',
-  default: 3,
+  default: 4,
 });
 
 export const LevelThemeSelector = selector({
@@ -61,6 +61,8 @@ export const LevelThemeSelector = selector({
         return 'Butts 2';
       case 3:
         return 'Animal Butts';
+      case 4:
+        return 'Butts 3';
       default:
         break;
     }
@@ -101,6 +103,9 @@ export const TimeInSecondsSelector = selector({
     const difference = currentTime - timerStart;
 
     let seconds = Math.floor((difference / 1000) % 60);
+    if (seconds < 0) {
+      seconds = 0;
+    }
 
     return seconds;
   },

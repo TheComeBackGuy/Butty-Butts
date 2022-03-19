@@ -69,7 +69,6 @@ export default function App() {
   const [playMatch] = useSound(match);
   const volumeUp = useRecoilValue(volumeState);
   const setTimerIsOn = useSetRecoilState(timerState);
-  const [showSubmitButton, setShowSubmitButton] = useState('none');
   const [cardsToCompareState, setCardsToCompareState] =
     useRecoilState(cardsToCompare);
   const [currentBoard, setCurrentBoard] = useRecoilState(currentBoardState);
@@ -205,19 +204,15 @@ export default function App() {
         }, 800 + increaseTime);
         increaseTime += 20;
       }
-      // setTimeout(() => {
-      //   setShowSubmitButton('flex');
-      //   console.log('this is the timed button turning on. ');
-      // }, 1500);
-
+      setTimeout(() => {
+        setGameIsActive(false);
+      }, 1500);
       setMatchedObjectsState([]);
       setTimerIsOn(false);
-      setGameIsActive(false);
     }
   }, [
     matchedObjectsState,
     currentBoard,
-    showSubmitButton,
     setCurrentBoard,
     setMatchedObjectsState,
     setGameIsActive,

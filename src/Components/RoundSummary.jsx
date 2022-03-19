@@ -6,6 +6,7 @@ import {
   levelNumberState,
   timeRecordsState,
   totalNumberOfLevelsState,
+  volumeState,
 } from '../data/atoms';
 import React, { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
@@ -24,24 +25,32 @@ const Summary = styled.section`
   top: 0;
   left: 0;
   display: none;
-  color: var(--blue);
   font-size: 20px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100vw;
   height: 100vh;
-  //   line-height: 2em;
-  //   border: 1px solid red;
   padding: 20px;
+  margin: auto auto;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
   z-index: 100;
-  trasition: 0.25s ease-in;
+  transition: 0.25s ease-in;
+`;
+
+const RoundEndSummary = styled.div`
+  width: 80%;
+  color: var(--darkBlue);
+  border-radius: 10px;
+  background-color: var(--blue);
+  background-image: url('../images/backgroundTile.gif');
+  border: 5px solid white;
+  padding: 10px;
 `;
 
 const Congrats = styled.h1`
-  color: var(--blue);
-  font-size: 50px;
+  color: white;
+  font-size: 30px;
   margin-bottom: 0.5em;
 `;
 
@@ -50,7 +59,7 @@ const Button = styled.button`
   margin: 30px auto;
   padding: 10px;
   border: 3px solid white;
-  background-color: #d75af2;
+  background: linear-gradient(var(--orange), var(--red));
   color: white;
   font-size: 30px;
   font-weight: 600;
@@ -67,7 +76,7 @@ const Button = styled.button`
 
 export default function RoundSummary() {
   const [gameIsActive, setGameIsActive] = useRecoilState(gameIsActiveState);
-  const level = useRecoilValue(levelNumberState);
+  // const level = useRecoilValue(levelNumberState);
   const time = useRecoilValue(timeRecordsState);
   const resetLevels = useResetRecoilState(levelNumberState);
   const totalNumberOfLevels = useRecoilValue(totalNumberOfLevelsState);
@@ -75,9 +84,19 @@ export default function RoundSummary() {
   const picturePack = useRecoilValue(PicturePackLockState);
 
   //explosions found here: www.fesliyanstudios.com
+  const volume = useRecoilValue(volumeState);
   const [playExplosion1] = useSound(Firework1);
   const [playExplosion2] = useSound(Firework2);
   const [playExplosion3] = useSound(Firework3);
+
+  const successMessages = [
+    'You Did It!',
+    'Congrats!',
+    'Conratulations!',
+    'Great Job!',
+    'Woo Hoo!',
+    'You Matched All The Butts!',
+  ];
 
   function handleLevelNumber() {
     console.log(`handleLevelNumber just ran and changed ${levelNumber}`);
@@ -96,7 +115,6 @@ export default function RoundSummary() {
   useEffect(() => {
     // setConfettiIsOn(false);
     // const confettiTimer = setInterval(() => {}, 1000);
-
     function playRandomFirework() {
       const firework = Math.floor(Math.random() * 3);
       switch (firework) {
@@ -113,7 +131,6 @@ export default function RoundSummary() {
           break;
       }
     }
-
     function runFireworks() {
       console.log('FiIREWORKS!!!!');
       let duration = 2 * 1000;
@@ -134,8 +151,10 @@ export default function RoundSummary() {
         if (timeLeft <= 0) {
           return clearInterval(interval);
         }
-        //   playExplosion();
-        playRandomFirework();
+        //only play explosion if volume is on;
+        if (volume) {
+          playRandomFirework();
+        }
         let particleCount = 50 * (timeLeft / duration);
         // since particles fall down, start a bit higher than random
         Confetti(
@@ -167,21 +186,26 @@ export default function RoundSummary() {
     playExplosion2,
     playExplosion3,
     levelNumber,
+    volume,
   ]);
 
   return (
     <Summary ref={successPage}>
-      <Congrats>Congratulations!</Congrats>
-      <p>{`You beat level ${level}`}</p>
-      <p>Time: {time[time.length - 1]}</p>
-      <Button
-        onClick={() => {
-          setGameIsActive(true);
-          handleLevelNumber();
-        }}
-      >
-        PLAY AGAIN
-      </Button>
+      <RoundEndSummary>
+        <Congrats>
+          {successMessages[Math.floor(Math.random() * successMessages.length)]}
+        </Congrats>
+        {/* <p>{`You beat level ${level}`}</p> */}
+        <p>Time: {time[time.length - 1]}</p>
+        <Button
+          onClick={() => {
+            setGameIsActive(true);
+            handleLevelNumber();
+          }}
+        >
+          PLAY AGAIN
+        </Button>
+      </RoundEndSummary>
     </Summary>
   );
 }
