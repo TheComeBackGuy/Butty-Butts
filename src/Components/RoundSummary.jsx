@@ -43,9 +43,10 @@ const RoundEndSummary = styled.div`
   color: var(--darkBlue);
   border-radius: 10px;
   background-color: var(--blue);
-  background-image: url('../images/backgroundTile.gif');
+
   border: 5px solid white;
   padding: 10px;
+  background-image: url('../images/BackgroundTileBlue.gif');
 `;
 
 const Congrats = styled.h1`
